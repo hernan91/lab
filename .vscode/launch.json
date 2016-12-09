@@ -1,0 +1,46 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Listen for XDebug",
+			"type": "php",
+			"request": "launch",
+			"port": 9000
+		},
+		{
+			"name": "Launch currently open script",
+			"type": "php",
+			"request": "launch",
+			"program": "${file}",
+			"cwd": "${fileDirname}",
+			"port": 9000
+		},
+		{
+            "name": "Attach with sourcemaps",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "sourceMaps": true,
+            "url": "http://localhost/hernan/index.php"
+        },
+        {
+            "name": "Attach to url with files served from ./out",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "url": "http://localhost/hernan/index.php",
+            "webRoot": "${workspaceRoot}/index.php"
+        },
+		{
+            "name": "Launch",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost/hernan/",
+            "port": 9223,
+            "sourceMaps": true,
+            "diagnosticLogging": true,
+            "webRoot": "${workspaceRoot}/hernan",
+            "userDataDir": "${workspaceRoot}/out/chrome"
+        }
+	]
+}
