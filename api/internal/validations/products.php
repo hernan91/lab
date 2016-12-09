@@ -28,7 +28,7 @@
 		if(empty($dni)) $errors[] = 'Por favor, ingrese un dni';
 		if(empty($direction)) $errors[] = 'Por favor, ingrese una direccion';
 		if(empty($role)) $errors[] = 'Por favor, ingrese un rol de usuario';
-		return $errors;s
+		return $errors;
 	}
 
 
