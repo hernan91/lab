@@ -5,7 +5,7 @@
 ?>
 <?php
 	$code = isset($_GET['code'])?$_GET['code']:die('<h3>Se produjo un problema al realizar la consulta</h3>');
-	$productData = api_internal_products_getAllProductsBasicTableData($code);
+	$productData = api_internal_products_getAllProductData($code);
 	$productImagesData = api_internal_products_getProductImagesData($code);
 	$firstImageFilename = $productImagesData[0]['id'].'.'.$productImagesData[0]['extension']; 
 	$success = isset($_GET['success']);

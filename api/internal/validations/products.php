@@ -15,10 +15,21 @@
 		return $errors;
 	}
 
-	function validations_users_validModifyUser($id, $username, $password, $email, $name, $lastname, $dni, $direction, $role){
+	function validations_products_validModifyProduct($code, $name, $manufacturer, $catName, $price, $state, $stock, $description){
 		$errors = array();
-		if(strlen($username)<6) $errors[] = 'El nombre de usuario debe tener al menos 6 caracteres';
-		if(!validations_users_usernameBelongsUser($id, $username)) $errors[] = 'El nombre de usuario ya está tomado'; 
+		if(!empty($code) && validations_products_numOcurrrencesCode($code)>0) $errors[] = 'El código ya está tomado';
+		if(empty($name)) $errors[] = 'Por favor ingrese un nombre de producto';
+		else if(validations_products_numOcurrrencesName($name)>0) $errors[] = 'El nombre del producto ya esta tomado';
+		if(empty($manufacturer)) $errors[] = 'Por favor ingrese un fabricante';
+		if(empty($catName)) $errors[] = 'Por favor ingrese una categoría';
+		if(empty($price)) $errors[] = 'Por favor ingrese un precio';
+		if(empty($state)) $errors[] = 'Por favor ingrese un estado';
+		else if($state!="Activo" && $state!="Inactivo") $errors[] = 'Por favor ingrese un estado válido';
+		if(empty($stock)) $errors[] = 'Por favor ingrese un número de stock';
+
+
+		if(!validations_products_codeBelongsProduct($code, $name)) $errors[] = 'El nombre de producto ya está tomado';
+		if(!validations_products_nameBelongsProduct($code, $name)) $errors[] = 'El nombre de producto ya está tomado'; 
 		if(strlen($password)!=32 && strlen($password)>0) $errors[] = 'Contraseña inválida';
 		if(!validEmail($email)) $errors[] = $email.' no es una dirección de correo válida';
 		if(!validations_users_emailBelongsUser($id, $email)) $errors[] = 'La direccion de correo esta en uso';
