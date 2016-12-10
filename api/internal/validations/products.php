@@ -44,6 +44,22 @@
 
 
 	///////////////////////////////
+	function validations_products_codeBelongsProduct($code, $name){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT `code` FROM `products` WHERE '".$name."'=`name`";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return count($rows)==0 || $rows[0]['code']==$code;
+			}
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
 	function validations_products_numOcurrrencesCode($code){
 		$con = new Conexion();
 		if($con->connect()){
