@@ -1,4 +1,4 @@
-<?php define('PAGE', "admin-add-users") ?>
+<?php define('PAGE', "admin-edit-users") ?>
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/users.php");

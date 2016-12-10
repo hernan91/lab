@@ -7,7 +7,7 @@
 ?>
 <?php
 	$searchedUser = isset($_GET['user'])?$_GET['user']:"";
-	$productsList = api_internal_products_getAllProductsBasicData();
+	$productsList = api_internal_products_getAllProductsBasicTableData();
 	$success = isset($_GET['success']);
 	$error = isset($_GET['error']);
 ?>
@@ -43,7 +43,7 @@
 				</div>
 			</div>
 			<div class="field">
-				<a href="admin-add-user.php">
+				<a href="admin-add-product.php">
 					<div class="ui right floated basic blue small labeled icon button">
 						<i class="plus icon"></i> Agregar producto
 					</div>
