@@ -7,7 +7,7 @@
 
 	$success = false;
 	$errors = array();
-	$code = $name = $manufacturer = $category_code = $price = $state = $stock = $description = "";
+	$code = $name = $manufacturer = $category_id = $price = $state = $stock = $description = "";
 	$val = false;
 	$categoriesList = api_internal_products_getAllCategoriesData();
 	if(isset($_POST['code'])){
@@ -18,8 +18,8 @@
 		$state = $_POST['state'];
 		$stock = $_POST['stock'];
 		$description = $_POST['description'];
-		$category_code = $_POST['category_code'];
-		$val = api_internal_products_newProduct($code, $name, $manufacturer, $category_code, $price, $state, $stock, $description);
+		$category_id = $_POST['category_id'];
+		$val = api_internal_products_newProduct($code, $name, $manufacturer, $category_id, $price, $state, $stock, $description);
 	}
 	
 	if(is_array($val)) $errors = $val;
@@ -38,7 +38,6 @@
 		</div>
 		<ul class="list">
 			<li>Cualquier contenido multimedia (imágenes o video) se podrá agregar una vez creado el producto</li>
-			<li>Si no ingresa un código de producto, el mismo se generará automáticamente</li>
 		</ul>
 	</div>
 
@@ -46,7 +45,7 @@
 		<form method="POST" class="ui form" id="formAgregarUsuario">
 			<h3 class="ui dividing header"><b>Formulario para agregar un nuevo producto</b></h3>
 			<div class="fields">
-				<div class="two wide field">
+				<div class="two wide field required">
 					<label>Código</label>
 					<input type="text" name="code" placeholder="Ingrese un código de producto" value="<?php echo $success?'':$code ?>">
 				</div>
@@ -60,12 +59,12 @@
 				</div>
 				<div class="three wide required field">
 					<label>Categoría</label>
-					<select class="ui selection dropdown" id="dropRol" name="category_code">
+					<select class="ui selection dropdown" id="dropRol" name="category_id">
 						<option value="">Seleccione una categoría</option>
 						<?php
 							foreach($categoriesList as $category){
-								$selected = (!$success && $category["code"]==$category_code)?"selected":"";
-								echo '<option '.$selected.' value="'.$category['code'].'" >'.$category["name"].'</option>';
+								$selected = (!$success && $category["id"]==$category_id)?"selected":"";
+								echo '<option '.$selected.' value="'.$category['id'].'" >'.$category["name"].'</option>';
 								//echo '<option value="'.$category["code"].'" '.(!$success && $category["name"]==$category_code)?"selected":"".'">'.$category["name"].'</option>';
 							}
 						?>

@@ -7,7 +7,7 @@
 
 	$success = false;
 	$errors = array();
-	$code = $name = $manufacturer = $category_code = $price = $state = $stock = $description = "";
+	$id = $code = $name = $manufacturer = $category_id = $price = $state = $stock = $description = "";
 	$val = false;
 	$categoriesList = api_internal_products_getAllCategoriesData();
 	
@@ -15,6 +15,7 @@
 		$code = $_GET['code'];
 		if(!isset($_POST['name'])){
 			$productData = api_internal_products_getAllProductBasicData($_GET['code']);
+			$id = $productData['id'];
 			$code = $productData['code'];
 			$name = $productData['name'];
 			$manufacturer = $productData['manufacturer'];
@@ -22,9 +23,10 @@
 			$state = $productData['state'];
 			$stock = $productData['stock'];
 			$description = $productData['description'];
-			$category_code = $productData['category_code'];
+			$category_id = $productData['category_id'];
 		}
 		else{
+			$id = $_POST['id'];
 			$code = $_POST['code'];
 			$name = $_POST['name'];
 			$manufacturer = $_POST['manufacturer'];
@@ -32,8 +34,8 @@
 			$state = $_POST['state'];
 			$stock = $_POST['stock'];
 			$description = $_POST['description'];
-			$category_code = $_POST['category_code'];
-			$val = api_internal_products_modifyProduct($code, $name, $manufacturer, $category_code, $price, $state, $stock, $description);
+			$category_id = $_POST['category_id'];
+			$val = api_internal_products_modifyProduct($id, $code, $name, $manufacturer, $category_id, $price, $state, $stock, $description);
 			if(is_array($val)) $errors = $val;
 			else{
 				$success = $val;
@@ -49,12 +51,6 @@
 		}
 	}
 ?>
-	<div class="ui <?php echo $success?"":"hidden" ?> success message">
-		<i class="close icon"></i>
-		<div class="header">Carga completa!</div>
-		<p>El producto <?php echo $name ?> se añadió correctamente a la lista de productos</p>
-	</div>
-
 	<div class="ui info message">
 		<i class="close icon"></i>
 		<div class="header">
@@ -62,15 +58,15 @@
 		</div>
 		<ul class="list">
 			<li>Cualquier contenido multimedia (imágenes o video) se podrá agregar una vez creado el producto</li>
-			<li>Si no ingresa un código de producto, el mismo se generará automáticamente</li>
 		</ul>
 	</div>
 
 	<div class="ui segment">
 		<form method="POST" class="ui form" id="formAgregarUsuario">
-			<h3 class="ui dividing header"><b>Formulario para agregar un nuevo producto</b></h3>
+			<h3 class="ui dividing header"><b>Formulario para modificar un producto</b></h3>
 			<div class="fields">
-				<div class="two wide field">
+				<input type="hidden" name="id" value="<?php echo $id?>"></input>
+				<div class="two wide field required">
 					<label>Código</label>
 					<input type="text" name="code" placeholder="Ingrese un código de producto" value="<?php echo $success?'':$code ?>">
 				</div>
@@ -84,12 +80,12 @@
 				</div>
 				<div class="three wide required field">
 					<label>Categoría</label>
-					<select class="ui selection dropdown" id="dropRol" name="category_code">
+					<select class="ui selection dropdown" id="dropRol" name="category_id">
 						<option value="">Seleccione una categoría</option>
 						<?php
 							foreach($categoriesList as $category){
-								$selected = (!$success && $category["code"]==$category_code)?"selected":"";
-								echo '<option '.$selected.' value="'.$category['code'].'" >'.$category["name"].'</option>';
+								$selected = (!$success && $category["id"]==$category_id)?"selected":"";
+								echo '<option '.$selected.' value="'.$category['id'].'" >'.$category["name"].'</option>';
 								//echo '<option value="'.$category["code"].'" '.(!$success && $category["name"]==$category_code)?"selected":"".'">'.$category["name"].'</option>';
 							}
 						?>
@@ -127,14 +123,14 @@
 			
 			<div class="ui error message"></div>
 			<div>
-				<div class="ui basic blue button" tabindex="0" id="botonCrear">Crear</div>
+				<div class="ui basic blue button" tabindex="0" id="botonCrear">Modificar</div>
 				<div class="ui basic blue button" tabindex="0" id="botonLimpieza">Limpiar</div>
 			</div>
 		</form>
 		<div class="ui <?php echo is_array($val)?'':'hidden' ?> error message">
 			<i class="close icon"></i>
 			<div class="header">
-				Hubieron errores al agregar el nuevo producto
+				Hubieron errores al modifcar el producto
 			</div>
 			<ul class="list">
 				<?php 

@@ -32,9 +32,11 @@ $(function(){
 			onSuccess: onValidForm,
 			fields: {
 				code: {
-					optional: true,
 					identifier : 'code',
 					rules: [{
+						type   : 'empty',
+						prompt : 'Por favor, ingrese un código'
+					},{
 						type   : 'integer',
 						prompt : 'Por favor, ingrese valor númerico para el código'
 					}]
@@ -56,8 +58,8 @@ $(function(){
 				price: {
 					identifier: 'price',
 					rules: [{
-						type   : 'integer',
-						prompt : 'Por favor, ingrese valor númerico para el precio'
+						type   : 'number',
+						prompt : 'Por favor, ingrese valor númerico (si es decimal use puntos)'
 					},{
 						type   : 'empty',
 						prompt : 'Por favor, ingrese un precio'
@@ -73,7 +75,7 @@ $(function(){
 				stock: {
 					identifier: 'stock',
 					rules: [{
-						type   : 'integer',
+						type   : 'integer[0..9999999999]',
 						prompt : 'Por favor, ingrese un valor de stock'
 					},{
 						type   : 'empty',

@@ -6,13 +6,14 @@
 <?php
 	$code = isset($_GET['code'])?$_GET['code']:die('<h3>Se produjo un problema al realizar la consulta</h3>');
 	$productData = api_internal_products_getAllProductData($code);
-	$productImagesData = api_internal_products_getProductImagesData($code);
-	$firstImageFilename = $productImagesData[0]['id'].'.'.$productImagesData[0]['extension']; 
-	$success = isset($_GET['success']);
-	$error = isset($_GET['error']);
+	$productImagesData = api_internal_products_getProductImagesData($productData['id']);
+	if(count($productImagesData)>0) $firstImageFilename = $productImagesData[0]['id'].'.'.$productImagesData[0]['extension'];
+	else $firstImageFilename = "";
+	/*$success = isset($_GET['success']);
+	$error = isset($_GET['error']);*/
 ?>
 
-<div class="ui <?php echo $success?"":"hidden" ?> success message">
+<!--<div class="ui <?php echo $success?"":"hidden" ?> success message">
 	<i class="close icon"></i>
 	<div class="header">Operacion completada correctamente</div>
 	<p><?php echo $success?$_GET['success']:""?></p>
@@ -23,7 +24,7 @@
 	<div class="header">Surgió un error al realizar la operación</div>
 	<p><?php echo $error?$_GET['error']:""?></p>
 </div>
-
+-->
 <div class="ui <?php echo (isset($productData))?'hidden':''?> warning message">
 	<div class="header">Advertencia</div>
 	No existe el producto solicitado
@@ -91,7 +92,7 @@
 				</div>
 				<div class="ui bottom attached tab segment" data-tab="third">
 					<?php
-						if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['code'].'.'.$productData['videoExtension'].'" width="406" controls></video>';
+						if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['id'].'.'.$productData['videoExtension'].'" width="406" controls></video>';
 						else echo 'No existe video para mostrar';
 					?>
 				</div>
