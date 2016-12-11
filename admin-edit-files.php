@@ -2,7 +2,11 @@
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/products.php");
-	//include_once("components/modalConfirm.php");
+	include_once 'components/modalConfirm.php'; 
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea subir esta imágen?", "modalConfirmacionSubirImagen");
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea borrar esta imágen?", "modalConfirmacionBorrarImagen");
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea subir este video?", "modalConfirmacionSubirVideo");
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea borrar este video?", "modalConfirmacionBorrarVideo");
 ?>
 <?php
 	$success = isset($_GET['success']);
@@ -87,47 +91,71 @@
 <div class="ui segment <?php echo (isset($productData))?'hidden':''?> ">
 	<h3 class="ui dividing header"><b>Contenido multimedia del producto seleccionado</b></h3>
 	<div class="ui grid"> <!--internally celled-->
-		<div class="five wide column">
+		<div class="ten wide column">
 			<div class="ui segment">
-				<?php
-					if(count($productImagesData)==0) echo '<h3>No existen imágenes para mostrar</h3>';
-					foreach($productImagesData as $imageData){
-						echo '<img class="ui centered medium image" src="data/img/products/'.$imageData['id'].".".$imageData['extension'].'">';
-						if($imageData!=end($productImagesData)) echo '<div class="ui divider"></div>';
-					}
-				?>
-			</div>
-			<form action="" method="post" enctype="multipart/form-data">
-				<input type="hidden" name="product_id" value="<?php echo $productData['id']?>">
-				Seleccione la imagen a subir
-				<input type="file" name="imageFile" id="imageFile">
-				<input type="submit" value="Subir">
-			</form>
-
-		</div>
-		
-				<div class="ui bottom attached tab segment" data-tab="third">
+				<div class="ui small images">
 					<?php
-						if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['id'].'.'.$productData['videoExtension'].'" width="406" controls></video>';
-						else echo 'No existe video para mostrar';
+						if(count($productImagesData)==0) echo '<h3>No existen imágenes para mostrar</h3>';
+						foreach($productImagesData as $imageData){
+							echo '
+								<div class="ui bordered image">
+									<i data-idimg="'.$imageData['id'].'" class="remove icon"></i>
+									<img src="data/img/products/'.$imageData['id'].".".$imageData['extension'].'">
+								</div>
+								';
+						}
 					?>
 				</div>
+				
+				<form id="imageForm" class="ui form" action="" method="post" enctype="multipart/form-data">
+					<div class="ui dividing header"></div>
+					<div class="ui header">Subir nueva imagen</div>
+					<div class="field">
+						<input type="hidden" name="product_id" value="<?php echo $productData['id']?>">
+						<input class="ui button" type="file" name="imageFile" id="imageFile">
+						<div id="uploadImageButton" class="ui button">Subir</div>
+					</div>
+				</form>
 			</div>
-			<form class="ui form"action="" method="post" enctype="multipart/form-data">
-				<input type="hidden" name="product_id" value="<?php echo $productData['id']?>">
-				Seleccione el archivo a subir
-				<input type="file" name="videoFile" id="videoFile">
-				<input type="submit" value="Subir" name="submit">
-			</form>
 		</div>
-		
+		<div class="six wide column">
+			<div class="ui segment">
+				<?php
+					if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['id'].'.'.$productData['videoExtension'].'" width="366" controls></video>';
+					else echo 'No existe video para mostrar';
+				?>
+				<form class="ui form" action="" method="post" enctype="multipart/form-data">
+					<div class="ui dividing header"></div>
+					<div class="ui header">Subir/reemplazar video</div>
+					<div class="field">
+						<input type="hidden" name="product_id" value="<?php echo $productData['id']?>">
+						<input class="" type="file" name="videoFile" id="videoFile">
+						<div class="ui upload icon">Subir</div>
+					</div>
+				</form>
+			</div>
+		</div>		
 	</div>
 </div>
 <?php include("adminSections/section-bottom.php") ?>
 <script>
 	$(function(){
-		$('.ui.centered.medium.image').click(function(e){
+		$('.remove.icon').click(function(e){
+			let idImg = $('.remove.icon').attr('data-idimg');
 			
+		});
+		$('#uploadImageButton').click(function(e){
+			e.preventDefault();
+			$('#modalConfirmacionSubirImagen.ui.basic.modal').modal('show');
+		});
+		$('.message .close').on('click', function() {
+			$(this).closest('.message').transition('fade');
+		});
+		$('#modalConfirmacionSubirImagen.ui.basic.modal').modal({
+			closable: false,
+			onApprove: function(){
+				$('#imageForm.ui.form').submit();
+			}
 		});
 	});
 </script>

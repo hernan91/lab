@@ -3,7 +3,7 @@
 	include("adminSections/section-top.php");
 	include_once("api/internal/users.php");
 	include_once 'components/modalConfirm.php'; 
-	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea eliminar este usuario?");
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea eliminar este usuario?", "modalConfirmacion");
 ?>
 <?php
 	$searchedUser = isset($_GET['user'])?$_GET['user']:"";

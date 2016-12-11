@@ -3,7 +3,7 @@
 	include("adminSections/section-top.php");
 	include_once("api/internal/users.php");
 	include_once 'components/modalConfirm.php'; 
-	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea agregar este usuario?");
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea agregar este usuario?", "modalConfirmacion");
 
 	$success = false;
 	$errors = array();

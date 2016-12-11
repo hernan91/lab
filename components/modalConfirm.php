@@ -1,7 +1,7 @@
 <?php
 
-function components_modal_confirm($title, $text){
-	echo'	<div class="ui basic modal" id="modalConfirmacion">
+function components_modal_confirm($title, $text, $idModal){
+	echo'	<div class="ui basic modal" id="'.$idModal.'">
 				<i class="close icon"></i>
 				<div class="header">'.$title.'</div>
 				<div class="image content">
