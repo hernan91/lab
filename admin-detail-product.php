@@ -13,7 +13,8 @@
 	$error = isset($_GET['error']);*/
 ?>
 
-<!--<div class="ui <?php echo $success?"":"hidden" ?> success message">
+<!--
+<div class="ui <?php echo $success?"":"hidden" ?> success message">
 	<i class="close icon"></i>
 	<div class="header">Operacion completada correctamente</div>
 	<p><?php echo $success?$_GET['success']:""?></p>
@@ -25,6 +26,7 @@
 	<p><?php echo $error?$_GET['error']:""?></p>
 </div>
 -->
+
 <div class="ui <?php echo (isset($productData))?'hidden':''?> warning message">
 	<div class="header">Advertencia</div>
 	No existe el producto solicitado
@@ -45,7 +47,10 @@
 		</div>
 		<div class="six wide column">
 			<div class="ui segment">
-				<img id="mainImage" class="ui centered medium image" src="<?php echo 'data/img/products/'.$firstImageFilename?>">
+				<?php
+					if(count($productImagesData)==0) echo '<h3>No existen imágenes para mostrar</h3>';
+					else echo '<img id="mainImage" class="ui centered medium image" src="'.'data/img/products/'.$firstImageFilename.'">';
+				?>
 			</div>
 		</div>
 		<div class="seven wide column">

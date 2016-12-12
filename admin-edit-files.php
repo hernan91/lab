@@ -2,7 +2,8 @@
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/products.php");
-	include_once 'components/modalConfirm.php'; 
+	include_once 'components/modalConfirm.php';
+	include_once("api/internal/multimedia.php");
 	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea subir esta imágen?", "modalConfirmacionSubirImagen");
 	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea borrar esta imágen?", "modalConfirmacionBorrarImagen");
 	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea subir este video?", "modalConfirmacionSubirVideo");
@@ -17,11 +18,7 @@
 		$productImagesData = api_internal_products_getProductImagesData($productData['id']);
 	}
 	if(isset($_POST['product_id'])){
-		include_once("api/internal/products.php");
 		if(isset($_FILES['imageFile'])){
-			include_once("api/internal/images.php");
-			
-			$code = $_GET['code'];
 			$product_id = $_POST['product_id'];
 			$imageFileType = pathinfo($_FILES["imageFile"]["name"], PATHINFO_EXTENSION);
 			api_internal_images_newImage($product_id, $imageFileType);
@@ -31,25 +28,25 @@
 			// es una imagen?
 			if(!getimagesize($_FILES["imageFile"]["tmp_name"])){
 				api_internal_images_removeImage($image_id);
-				return header("Location: ?error=El%20archivo%20no%20es%20una%20imágen&code=".$code);
+				return header("Location: ?error=El%20archivo%20no%20es%20una%20imágen&code=".$productCode);
 			}
 			
 			// existe la imagen?
 			if (file_exists($file)){
 				api_internal_images_removeImage($image_id);
-				return header("Location: ?error=Ya%20existe%20la%20imágen&code=".$code);
+				return header("Location: ?error=Ya%20existe%20la%20imágen&code=".$productCode);
 			} 
 			
 			// tamaño
 			if ($_FILES["imageFile"]["size"] > 500000){
 				api_internal_images_removeImage($image_id);
-				return header("Location: ?error=Archivo%20demasiado%20grande%20&code=".$code);
+				return header("Location: ?error=Archivo%20demasiado%20grande%20&code=".$productCode);
 			}
 			
 			// Formatos
 			if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "jpg" && $imageFileType != "gif" ){
 				api_internal_images_removeImage($image_id);
-				return header("Location: ?error=Formato%20incorrecto.%20Solo%20jpeg,jpg,png%20y%20gif.&code=".$code);
+				return header("Location: ?error=Formato%20incorrecto.%20Solo%20jpeg,jpg,png%20y%20gif.&code=".$productCode);
 			}
 			
 			// Check if $uploadOk is set to true by an error
@@ -57,15 +54,47 @@
 				header("Location: ?error=Hubo%20un%20error%20al%20subir%20la%20imagen");*/
 
 			if (move_uploaded_file($_FILES["imageFile"]["tmp_name"], $file)) {
-				return header("Location: ?code=".$code."&success=Imagen%20subida%20correctamente");
+				return header("Location: ?code=".$productCode."&success=Imagen%20subida%20correctamente");
 			} else {
 				api_internal_images_removeImage($image_id);
-				return header("Location: ?error=Hubo%20un%20error%20al%20subir%20la%20imagen&code=".$code);
+				return header("Location: ?error=Hubo%20un%20error%20al%20subir%20la%20imagen&code=".$productCode);
 			}
 		}
 		if(isset($_FILES['videoFile'])){
-
-		}	
+			$product_id = $_POST['product_id'];
+			$videoFileType = pathinfo($_FILES["videoFile"]["name"], PATHINFO_EXTENSION);
+			$file = 'data/video/products/'.$product_id.'.'.$videoFileType;
+			
+			if(!filesize($_FILES["videoFile"]["tmp_name"]))	return header("Location: ?error=El%20archivo%20no%20es%20una%20imágen&code=".$productCode);
+			//if (file_exists($file))	return header("Location: ?error=Ya%20existe%20la%20imágen&code=".$productCode);
+			if ($_FILES["videoFile"]["size"] > 50000000) return header("Location: ?error=Archivo%20demasiado%20grande%20&code=".$productCode);
+			if($videoFileType != "mp4" && $videoFileType != "ogg") return header("Location: ?error=Formato%20incorrecto.%20Solo%20mp4y%20ogg.&code=".$productCode);
+			if (move_uploaded_file($_FILES["videoFile"]["tmp_name"], $file)){
+				api_internal_videos_editVideoExtension($product_id, $videoFileType);
+				return header("Location: ?code=".$productCode."&success=Video%20subido%20correctamente");
+			} 
+			else return header("Location: ?error=Hubo%20un%20error%20al%20subir%20el%20video&code=".$productCode);
+		}
+	}
+	if(isset($_GET['imageFileRemoveId'])){
+		$imageFileRemoveId = $_GET['imageFileRemoveId'];
+		$imageFileExtension = api_internal_images_getImageExtension($imageFileRemoveId);
+		$file = "data/img/products/".$imageFileRemoveId.".".$imageFileExtension;
+		if(unlink($file)){
+			api_internal_images_removeImage($imageFileRemoveId);
+			return header("Location: ?code=".$productCode."&success=Imagen%20borrada%20correctamente");
+		}
+		else return header("Location: ?error=Hubo%20un%20error%20al%borrar%20la%20imagen&code=".$productCode);
+	}
+	if(isset($_GET['videoFileRemoveProductId'])){  //videoFileRemoveProductId
+		$imageFileRemoveId = $_GET['imageFileRemoveId'];
+		$imageFileExtension = api_internal_images_getImageExtension($imageFileRemoveId);
+		$file = "data/img/products/".$imageFileRemoveId.".".$imageFileExtension;
+		if(unlink($file)){
+			api_internal_images_removeImage($imageFileRemoveId);
+			return header("Location: ?code=".$productCode."&success=Video%20borrado%20correctamente");
+		}
+		else return header("Location: ?error=Hubo%20un%20error%20al%borrar%20el%20video&code=".$productCode);
 	}
 	
 
@@ -99,7 +128,7 @@
 						foreach($productImagesData as $imageData){
 							echo '
 								<div class="ui bordered image">
-									<i data-idimg="'.$imageData['id'].'" class="remove icon"></i>
+									<i data-code="'.$productCode.'" data-idimg="'.$imageData['id'].'" id="imgRemove" class="remove icon"></i>
 									<img src="data/img/products/'.$imageData['id'].".".$imageData['extension'].'">
 								</div>
 								';
@@ -124,13 +153,13 @@
 					if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['id'].'.'.$productData['videoExtension'].'" width="366" controls></video>';
 					else echo 'No existe video para mostrar';
 				?>
-				<form class="ui form" action="" method="post" enctype="multipart/form-data">
+				<form id="videoForm" class="ui form" class="ui form" action="" method="post" enctype="multipart/form-data">
 					<div class="ui dividing header"></div>
 					<div class="ui header">Subir/reemplazar video</div>
 					<div class="field">
 						<input type="hidden" name="product_id" value="<?php echo $productData['id']?>">
-						<input class="" type="file" name="videoFile" id="videoFile">
-						<div class="ui upload icon">Subir</div>
+						<input class="ui button" type="file" name="videoFile" id="videoFile">
+						<div id="uploadVideoButton" class="ui button">Subir</div>
 					</div>
 				</form>
 			</div>
@@ -140,16 +169,15 @@
 <?php include("adminSections/section-bottom.php") ?>
 <script>
 	$(function(){
-		$('.remove.icon').click(function(e){
-			let idImg = $('.remove.icon').attr('data-idimg');
-			
-		});
-		$('#uploadImageButton').click(function(e){
-			e.preventDefault();
-			$('#modalConfirmacionSubirImagen.ui.basic.modal').modal('show');
-		});
 		$('.message .close').on('click', function() {
 			$(this).closest('.message').transition('fade');
+		});
+
+
+		///////////////////////////////////////////////////////////////////////////////
+		$('#uploadImageButton.ui.button').click(function(e){
+			e.preventDefault();
+			$('#modalConfirmacionSubirImagen.ui.basic.modal').modal('show');
 		});
 		$('#modalConfirmacionSubirImagen.ui.basic.modal').modal({
 			closable: false,
@@ -157,6 +185,47 @@
 				$('#imageForm.ui.form').submit();
 			}
 		});
+
+		let idImg;
+		let code;
+		$('#imgRemove.remove.icon').click(function(e){
+			idImg = e.target.getAttribute('data-idimg');
+			code = e.target.getAttribute('data-code');
+			$('#modalConfirmacionBorrarImagen.ui.basic.modal').modal('show');
+		});
+		$('#modalConfirmacionBorrarImagen.ui.basic.modal').modal({
+			closable: false,
+			onApprove: function(){
+				window.location = "admin-edit-files.php?code="+code+"&imageFileRemoveId="+idImg;
+			}
+		});
+
+
+		$('#uploadVideoButton.ui.button').click(function(e){
+			e.preventDefault();
+			$('#modalConfirmacionSubirVideo.ui.basic.modal').modal('show');
+		});
+		$('#modalConfirmacionSubirVideo.ui.basic.modal').modal({
+			closable: false,
+			onApprove: function(){
+				$('#videoForm.ui.form').submit();
+			}
+		});
+		
+		/*let idImg;
+		let code;
+		$('#imgRemove.remove.icon').click(function(e){
+			idImg = e.target.getAttribute('data-idimg');
+			code = e.target.getAttribute('data-code');
+			$('#modalConfirmacionBorrarImagen.ui.basic.modal').modal('show');
+		});
+		$('#modalConfirmacionBorrarImagen.ui.basic.modal').modal({
+			closable: false,
+			onApprove: function(){
+				window.location = "admin-edit-files.php?code="+code+"&imageFileRemoveId="+idImg;
+			}
+		});*/
+		
 	});
 </script>
 <?php 

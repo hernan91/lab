@@ -25,16 +25,16 @@
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
-	function api_internal_images_getImageData($id){
+	function api_internal_images_getImageExtension($id){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT `product_id`, `extension` FROM `images` WHERE P.`category_code`=C.`code`";
+			$query = "SELECT `extension` FROM `images` WHERE `id`='".$id."'";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
 					$rows[] = $r;
 				}
-				return $rows;
+				return $rows[0]['extension'];
 			}
 			throw new Exception("No existen productos.");
 		}
@@ -57,7 +57,18 @@
 		}
 		$con->close();
 		throw new Exception("Imposible conectarse a la base de datos.");
-		
+	}
+
+	function api_internal_videos_editVideoExtension($product_id, $extension){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "UPDATE `products` SET `videoExtension`='".$extension."' WHERE `id`='".$product_id."'";
+			$result = $con->query($query);
+			if($result) return $result;
+			throw new Exception("No se pudo cargar la imagen.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
 ?>
