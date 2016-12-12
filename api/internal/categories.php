@@ -1,4 +1,5 @@
 <?php
+	include_once 'api/connection.php';
 
 	function api_internal_categories_getAllCategoriesData(){
 		$con = new Conexion();

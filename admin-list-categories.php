@@ -5,7 +5,7 @@
 	include_once 'components/modalConfirm.php';
 	include_once 'components/modalError.php';
 	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea eliminar esta categoría?", "modalConfirmacion");
-	components_model_error("Error", "Existen productos que pertenecen a esta categoría, elimínelos primero", "modalError");
+	components_modal_error("Error", "Existen productos que pertenecen a esta categoría, elimínelos primero", "modalError");
 ?>
 <?php
 	$searchedCategory = isset($_GET['user'])?$_GET['user']:"";
@@ -63,6 +63,7 @@
 				<th class="center aligned">Código</th>
 				<th class="center aligned">Nombre</th>
 				<th class="center aligned">Ver descripción</th>
+				<th class="center aligned">Operaciones</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -74,18 +75,36 @@
 					foreach($row as $key=>$value){
 						if($key=="id"){
 							$id = $value;
+							continue;
 						}
-						else if($key=="id"){
+						else if($key=="description"){
+							echo'
+								<td class="center aligned">
+									<a data-id="'.$id.'" href="" class="buttonDescription">Ver descripción</a>
+								</td>
+							';
 							echo '
-								
+							
+								<div id="modal'.$id.'" class="description ui modal">
+									<i class="close icon"></i>
+									<div class="header">
+										Descripcion de la categoría
+									</div>
+									<div class="image content">
+										<h4>'.($value?$value:"No existe una descripción para esta categoría").'</h4>
+									</div>
+									<div class="actions">
+										<div class="ui black deny button">Cerrar</div>
+									</div>
+								</div>
 							';
 							continue;
 						}
 						echo '<td class="center aligned">'.$value.'</td>';
 					}
 					echo 	'<td class="center aligned">
-								<a data-tooltip="Editar la categoría" data-inverted="" href="admin-edit-user.php?id='.$id.'"><i class="icon edit"></i></a>
-								<a data-tooltip="Borrar la categoría" data-inverted="" class="buttonRemove" link="admin-remove-user.php?id='.$id.'"><i class="icon remove"></i></a>
+								<a data-tooltip="Editar la categoría" data-inverted="" href="admin-edit-category.php?id='.$id.'"><i class="icon edit"></i></a>
+								<a data-tooltip="Borrar la categoría" data-inverted="" class="buttonRemove" link="admin-remove-category.php?id='.$id.'"><i class="icon remove"></i></a>
 							</td>';
 					echo '</tr>';
 				}
@@ -94,7 +113,7 @@
 		<tfoot class="full-width">
 			<tr>
 				<th colspan="9">
-					<a href="admin-add-user.php">
+					<a href="admin-add-category.php">
 						<div class="ui right floated basic blue small labeled icon button">
 							<i class="plus icon"></i> Agregar categoría
 						</div>
@@ -127,6 +146,13 @@
 			e.preventDefault();
 			$('form#formFiltro').submit();
 		});
+
+		$('.buttonDescription').click(function(e){
+			e.preventDefault();
+			let id = $(e.target).attr('data-id');
+			$('#modal'+id+'.description.ui.modal').modal('show');	
+		});
+		
 	});
 </script>
 <?php 
