@@ -18,7 +18,7 @@
 	function validations_products_validModifyProduct($id, $code, $name, $manufacturer, $category_id, $price, $state, $stock, $description){
 		$errors = array();
 		if(empty($code)) $errors[] = 'Por favor ingrese un código de producto'; 
-		else if(!validations_products_codeBelongsProduct($id, $code)) $errors[] = 'El el código de producto ya está tomado';
+		else if(!validations_products_codeBelongsProduct($id, $code)) $errors[] = 'El código de producto ya está tomado';
 		if(empty($name)) $errors[] = 'Por favor ingrese un nombre de producto';
 		else if(!validations_products_nameBelongsProduct($id, $name)) $errors[] = 'El nombre de producto ya está tomado';
 		if(empty($manufacturer)) $errors[] = 'Por favor, ingrese un fabricante';

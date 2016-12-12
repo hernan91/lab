@@ -9,28 +9,22 @@
 		return $errors;
 	}
 
-	function validations_products_validModifyProduct($id, $code, $name, $manufacturer, $category_id, $price, $state, $stock, $description){
+	function validations_categories_validModifyCategory($id, $code, $name, $description){
 		$errors = array();
 		if(empty($code)) $errors[] = 'Por favor ingrese un código de producto'; 
-		else if(!validations_products_codeBelongsProduct($id, $code)) $errors[] = 'El el código de producto ya está tomado';
+		else if(!validations_categories_codeBelongsCategory($id, $code)) $errors[] = 'El código de categoría ya está tomado';
 		if(empty($name)) $errors[] = 'Por favor ingrese un nombre de producto';
-		else if(!validations_products_nameBelongsProduct($id, $name)) $errors[] = 'El nombre de producto ya está tomado';
-		if(empty($manufacturer)) $errors[] = 'Por favor, ingrese un fabricante';
-		if(empty($category_id)) $errors[] = 'Por favor ingrese una categoría';
-		if(empty($price)) $errors[] = 'Por favor ingrese un precio';
-		if(empty($state)) $errors[] = 'Por favor ingrese un estado';
-		else if($state!="Activo" && $state!="Inactivo") $errors[] = 'Por favor ingrese un estado válido';
-		if($stock<0) $errors[] = 'Por favor ingrese un número válido de stock';
+		else if(!validations_categories_nameBelongsCategory($id, $name)) $errors[] = 'El nombre de categoría ya está tomado';
 		return $errors;
 	}
 
 
 
 	///////////////////////////////
-	function validations_products_nameBelongsProduct($id, $name){
+	function validations_categories_nameBelongsCategory($id, $name){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT `id` FROM `products` WHERE '".$name."'=`name`";
+			$query = "SELECT `id` FROM `categories` WHERE '".$name."'=`name`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -44,16 +38,15 @@
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
-	function validations_products_codeBelongsProduct($id, $code){
+	function validations_categories_codeBelongsCategory($id, $code){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT `id` FROM `products` WHERE '".$code."'=`code`";
+			$query = "SELECT `id` FROM `categories` WHERE '".$code."'=`code`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
 					$rows[] = $r;
 				}
-				//retorna true si no existen usuarios con ese email o existe uno que es el actual
 				return count($rows)==0 || $rows[0]['id']==$id;
 			}
 		}

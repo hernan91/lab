@@ -14,7 +14,7 @@
 	</div>
 
 	<div class="right menu">
-		<a class="item">Perfil de Hernan</a>
+		<a class="item">Cerrar sesión</a>
 		<a class="item">Salir</a>
 	</div>
 </div>

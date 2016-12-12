@@ -60,7 +60,7 @@
 
 	<div class="ui segment">
 		<form method="POST" class="ui form" id="formAgregarUsuario">
-			<h4 class="ui dividing header"><b>FORMULARIO DE MODIFICACIÓN DE USUARIOS</b></h4>
+			<h4 class="ui dividing header"><b>Formulario de modificación de usuarios</b></h4>
 			<div class="three fields">
 				<div class="required field">
 					<label>Usuario</label>
