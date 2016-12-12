@@ -43,10 +43,27 @@
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
-	function api_internal_products_getAllProductsBasicData(){
+	/*function api_internal_products_getAllProductsBasicData(){
 		$con = new Conexion();
 		if($con->connect()){
 			$query = "SELECT P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_code`=C.`code`";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows;
+			}
+			throw new Exception("No existen productos.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}*/
+
+	function api_internal_products_getAllProductsBasicData(){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -109,6 +126,7 @@
 		$con->close();
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
+	
 
 	function api_internal_products_getProductImagesData($id){
 		$con = new Conexion();
@@ -142,19 +160,26 @@
 		return $rows;
 	}
 
-	function api_internal_products_getFirstImg(){
+	function api_internal_products_getFirstImg($id){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`code`, P.`name`, C.`name`, P.`description`, P.`manufacturer`, P.`price`, P.`videoExtension`, P.`state` FROM `products` AS P, `categories` AS C WHERE P.`category_code`= C.`code`";
+			$query = "SELECT `id`, `extension` FROM `images` WHERE `product_id`='".$id."'";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
 					$rows[] = $r;
 				}
+				if(isset($rows[0])) return $rows[0];
+				else{
+					$rows[0]['id'] = "";
+					$rows[0]['extension'] = "";
+					return $rows[0];
+				}
 			}
+			throw new Exception("No existen imagenes o no existe el producto.");
 		}
 		$con->close();
-		return $rows;
+		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
 	function api_internal_products_getAllCategoriesData(){
@@ -169,6 +194,23 @@
 				return $rows;
 			}
 			throw new Exception("No existen categorías");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
+	function api_internal_products_getMostSelledProducts(){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock`, SUM(S.`quantity`) AS quantity FROM `products` AS P, `categories` AS C, `sales` AS S WHERE P.`category_id` = C.`id` AND P.`id` = S.`id_product` AND P.`id` IN ( SELECT `id_product` FROM `sales` WHERE `selled`=1) GROUP BY P.`id` LIMIT 8";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows;
+			}
+			throw new Exception("No existen productos");
 		}
 		$con->close();
 		throw new Exception("Imposible conectarse a la base de datos.");

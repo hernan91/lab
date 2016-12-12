@@ -87,43 +87,5 @@
 	}
 
 	//si el nombre de usuario pertenece al mismo usuario o no existe entonces esta todo bien
-	function validations_users_usernameBelongsUser($id, $username){
-		$con = new Conexion();
-		if($con->connect()){
-			$query = "SELECT `id` FROM `users` WHERE '".$username."'=`username`";
-			$rows = array();
-			if($result = $con->query($query)){
-				while($r = mysqli_fetch_assoc($result)) {
-					$rows[] = $r;
-				}
-				return count($rows)==0 || $rows[0]['id']==$id;
-			}
-		}
-		$con->close();
-		throw new Exception("Imposible conectarse a la base de datos.");
-	}
-
-	function validations_users_emailBelongsUser($id, $email){
-		$con = new Conexion();
-		if($con->connect()){
-			$query = "SELECT `id` FROM `users` WHERE '".$email."'=`email`";
-			$rows = array();
-			if($result = $con->query($query)){
-				while($r = mysqli_fetch_assoc($result)) {
-					$rows[] = $r;
-				}
-				//retorna true si no existen usuarios con ese email o existe uno que es el actual
-				return count($rows)==0 || $rows[0]['id']==$id;
-			}
-		}
-		$con->close();
-		throw new Exception("Imposible conectarse a la base de datos.");
-	}
-
-	function validEmail($email){
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
- 			return false;
-		}
-		return true;
-	}
+	
 ?>

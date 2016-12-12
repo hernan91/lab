@@ -1,5 +1,5 @@
 <?php
-	define('ADMIN_PATH_LEVEL', 2);
+	define('ADMIN_PATH_LEVEL', true);
 	define('DEBUG', true);
 ?>
 <!DOCTYPE html>
