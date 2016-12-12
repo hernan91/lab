@@ -9,7 +9,7 @@
 		<div class="menu">
 			<div class="header">Operaciones</div>
 			<a class="item <?php echo (PAGE=='admin-list-products')?'active':'' ?>" href="admin-list-products.php">Listar productos</a>
-			<a class="item <?php echo (PAGE=='admin-list-categories')?'active':'' ?>"href="admin-list-categories.php">Listar categorias</a>
+			<a class="item <?php echo (PAGE=='admin-list-category')?'active':'' ?>" href="admin-list-category.php">Listar categorias</a>
 		</div>
 	</div>
 

@@ -86,12 +86,12 @@
 		}
 		else return header("Location: ?error=Hubo%20un%20error%20al%borrar%20la%20imagen&code=".$productCode);
 	}
-	if(isset($_GET['videoFileRemoveProductId'])){  //videoFileRemoveProductId
-		$imageFileRemoveId = $_GET['imageFileRemoveId'];
-		$imageFileExtension = api_internal_images_getImageExtension($imageFileRemoveId);
-		$file = "data/img/products/".$imageFileRemoveId.".".$imageFileExtension;
+	if(isset($_GET['videoRemoveProductId'])){  //videoFileRemoveProductId
+		$productId = $_GET['videoRemoveProductId'];
+		$videoExtension = $_GET['videoExtension'];
+		$file = "data/video/products/".$productId.".".$videoExtension;
 		if(unlink($file)){
-			api_internal_images_removeImage($imageFileRemoveId);
+			api_internal_videos_removeVideoExtension($productCode);
 			return header("Location: ?code=".$productCode."&success=Video%20borrado%20correctamente");
 		}
 		else return header("Location: ?error=Hubo%20un%20error%20al%borrar%20el%20video&code=".$productCode);
@@ -124,6 +124,20 @@
 			<div class="ui segment">
 				<div class="ui small images">
 					<?php
+							/*<div class="ui special cards">
+								<div class="card">
+									<div class="blurring dimmable image">
+									<div class="ui dimmer">
+										<div class="content">
+										<div class="center">
+											<div class="ui inverted button">Add Friend</div>
+										</div>
+										</div>
+									</div>
+									<img src="/images/avatar/large/elliot.jpg">
+									</div>
+								</div>
+							</div>*/
 						if(count($productImagesData)==0) echo '<h3>No existen imágenes para mostrar</h3>';
 						foreach($productImagesData as $imageData){
 							echo '
@@ -150,6 +164,7 @@
 		<div class="six wide column">
 			<div class="ui segment">
 				<?php
+					echo '<i data-code="'.$productCode.'" data-product-id="'.$productData['id'].'" video-ext="'.$productData['videoExtension'].'" id="videoRemove" class="remove icon"></i>';
 					if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['id'].'.'.$productData['videoExtension'].'" width="366" controls></video>';
 					else echo 'No existe video para mostrar';
 				?>
@@ -211,21 +226,23 @@
 				$('#videoForm.ui.form').submit();
 			}
 		});
-		
-		/*let idImg;
-		let code;
-		$('#imgRemove.remove.icon').click(function(e){
-			idImg = e.target.getAttribute('data-idimg');
+
+
+		let productId;
+		let videoExtension;
+		$('#videoRemove.remove.icon').click(function(e){
+			productId = e.target.getAttribute('data-product-id');
 			code = e.target.getAttribute('data-code');
-			$('#modalConfirmacionBorrarImagen.ui.basic.modal').modal('show');
+			videoExtension = e.target.getAttribute('video-ext');
+			$('#modalConfirmacionBorrarVideo.ui.basic.modal').modal('show');
 		});
-		$('#modalConfirmacionBorrarImagen.ui.basic.modal').modal({
+		$('#modalConfirmacionBorrarVideo.ui.basic.modal').modal({
 			closable: false,
 			onApprove: function(){
-				window.location = "admin-edit-files.php?code="+code+"&imageFileRemoveId="+idImg;
+				window.location = "admin-edit-files.php?code="+code+"&videoRemoveProductId="+productId+"&videoExtension="+videoExtension;
 			}
-		});*/
-		
+		});
+
 	});
 </script>
 <?php 

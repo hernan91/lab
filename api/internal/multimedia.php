@@ -71,4 +71,16 @@
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
+	function api_internal_videos_removeVideoExtension($code){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "UPDATE `products` SET `videoExtension`='' WHERE `code`='".$code."'";
+			$result = $con->query($query);
+			if($result) return $result;
+			throw new Exception("No se pudo cargar la imagen.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
 ?>
