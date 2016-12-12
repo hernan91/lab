@@ -1,25 +1,19 @@
 <?php define('PAGE', "admin-add-users") ?>
 <?php 
 	include("adminSections/section-top.php");
-	include_once("api/internal/users.php");
+	include_once("api/internal/categories.php");
 	include_once 'components/modalConfirm.php'; 
-	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea agregar este usuario?", "modalConfirmacion");
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea agregar esta categoría?", "modalConfirmacion");
 
 	$success = false;
 	$errors = array();
-	$username = $password = $email = $name = $lastname = $dni = $direction = $phone = $role = "";
+	$id = $code = $name = $description = "";
 	$val = false;
-	if(isset($_POST['username'])){
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		$email = $_POST['email'];
+	if(isset($_POST['code'])){
+		$code = $_POST['code'];
 		$name = $_POST['name'];
-		$lastname = $_POST['lastname'];
-		$dni = $_POST['dni'];
-		$direction = $_POST['direction'];
-		$phone = $_POST['phone'];
-		$role = $_POST['role'];
-		$val = api_internal_users_newUser($username, $password, $email, $name, $lastname, $dni, $direction, $phone, $role);
+		$description = $_POST['description'];
+		$val = api_internal_categories_newCategory($code, $name, $description);
 	}
 	
 	if(is_array($val)) $errors = $val;
@@ -28,60 +22,26 @@
 	<div class="ui <?php echo $success?"":"hidden" ?> success message">
 		<i class="close icon"></i>
 		<div class="header">Carga completa!</div>
-		<p>El usuario <?php echo '<b>'.$username.'<b/>' ?> se añadió correctamente a la lista de usuarios</p>
+		<p>La categoría <?php echo '<b>'.$name.'<b/>' ?> se añadió correctamente a la lista de categorías</p>
 	</div>
 
 	<div class="ui segment">
-		<form method="POST" class="ui form" id="formAgregarUsuario">
-			<h3 class="ui dividing header"><b>Formulario para crear un nuevo usuario</b></h3>
-			<div class="three fields">
+		<form method="POST" class="ui form" id="formAgregarCategoria">
+			<h3 class="ui dividing header"><b>Formulario para crear una nueva categoría</b></h3>
+			<div class="two fields">
 				<div class="required field">
-					<label>Usuario</label>
-					<input type="text" name="username" placeholder="Ingrese un nombre de usuario" value="<?php echo $success?'':$username ?>">
+					<label>Código</label>
+					<input type="text" name="code" placeholder="Ingrese un código de categoría" value="<?php echo $success?'':$code ?>">
 				</div>
 				<div class="required field">
-					<label>Contraseña</label>
-					<input type="password" data-validate="password" id="password" placeholder="Ingrese una contraseña">
-				</div>
-				<div class="required field">
-					<label>Repetir contraseña</label>
-					<input type="password" data-validate="confPassword" id="confPassword" placeholder="Ingrese nuevamente la contraseña">
-				</div>
-			</div>
-			<div class="fields">
-				<div class="six wide required field">
 					<label>Nombre</label>
-					<input type="text" name="name" placeholder="Ingrese un nombre" value="<?php echo $success?'':$name ?>">
-				</div>
-				<div class="six wide required field">
-					<label>Apellido</label>
-					<input type="text" name="lastname" placeholder="Ingrese un apellido"  value="<?php echo $success?'':$lastname ?>">
-				</div>
-				<div class="eight wide field">
-					<label>Dirección de correo electrónico</label>
-					<input type="email" name="email" placeholder="Ingrese un e-mail" value="<?php echo $success?'':$email ?>">
+					<input type="text" name="name" placeholder="Ingrese un nombre de categoría" value="<?php echo $success?'':$name ?>">
 				</div>
 			</div>
-			<div class="fields">
-				<div class="three wide required field">
-					<label>DNI</label>
-					<input type="text" name="dni" placeholder="Ingrese un DNI" value="<?php echo $success?'':$dni ?>">
-				</div>
-				<div class="six wide field">
-					<label>Direccion</label>
-					<input type="text" name="direction" placeholder="Ingrese una dirección" value="<?php echo $success?'':$direction ?>">
-				</div>
-				<div class="four wide field">
-					<label>Teléfono</label>
-					<input type="text" name="phone" placeholder="Ingrese un número de teléfono" value="<?php echo $success?'':$phone ?>">
-				</div>
-				<div class="three wide required field">
-					<label>Rol</label>
-					<select class="ui selection dropdown" id="dropRol" name="role">
-						<option value="">Seleccione un rol</option>
-						<option data-value="administrator" value="Administrador" <?php echo (!$success & $role=='Administrador')?'selected':'' ?>>Administrador</option>
-						<option data-value="client" value="Cliente" <?php echo (!$success & $role=='Cliente')?'selected':'' ?>>Cliente</option>
-					</select>
+			<div class="fields">				
+				<div class="twelve wide field">
+					<label>Descripcion</label>
+					<textarea name="description" placeholder="Describa la categoría"><?php echo $success?'':$description ?></textarea>
 				</div>
 			</div>
 			<div class="ui error message"></div>
@@ -89,12 +49,11 @@
 				<div class="ui basic blue button" tabindex="0" id="botonCrear">Crear</div>
 				<div class="ui basic blue button" tabindex="0" id="botonLimpieza">Limpiar</div>
 			</div>
-			<input type="hidden" id="cryptedPasswordField" name="password">
 		</form>
 		<div class="ui <?php echo is_array($val)?'':'hidden' ?> error message">
 			<i class="close icon"></i>
 			<div class="header">
-				Hubieron errores al agregar un nuevo usuario!
+				Hubieron errores al agregar la nueva categoría
 			</div>
 			<ul class="list">
 				<?php 
@@ -107,8 +66,4 @@
 	</div>
 	<?php include("adminSections/section-bottom.php") ?>
 
-<script src="js/admin-add-user.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
-<?php 
-	//unset();
-?>
+<script src="js/admin-add-category.js"></script>
