@@ -25,6 +25,12 @@
 	if(is_array($val)) $errors = $val;
 	else $success = $val;
 ?>
+	<div class="ui <?php echo count($categoriesList)==0?"":"hidden" ?> error message">
+		<i class="close icon"></i>
+		<div class="header">Error</div>
+		<p>No existen categorías, debe crear una para agregar un nuevo producto</p>
+	</div>
+	
 	<div class="ui <?php echo $success?"":"hidden" ?> success message">
 		<i class="close icon"></i>
 		<div class="header">Carga completa!</div>

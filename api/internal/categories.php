@@ -3,7 +3,7 @@
 	function api_internal_categories_getAllCategoriesData(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT * FROM `category`";
+			$query = "SELECT * FROM `categories`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {

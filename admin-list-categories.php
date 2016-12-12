@@ -1,4 +1,4 @@
-<?php define('PAGE', "admin-list-category") ?>
+<?php define('PAGE', "admin-list-categories") ?>
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/categories.php");
@@ -8,7 +8,7 @@
 	components_model_error("Error", "Existen productos que pertenecen a esta categoría, elimínelos primero", "modalError");
 ?>
 <?php
-	$searchedUser = isset($_GET['user'])?$_GET['user']:"";
+	$searchedCategory = isset($_GET['user'])?$_GET['user']:"";
 	$categoriesList = api_internal_categories_getAllCategoriesData();
 	$success = isset($_GET['success']);
 	$error = isset($_GET['error']);
@@ -26,11 +26,9 @@
 	<p><?php echo $error?$_GET['error']:""?></p>
 </div>
 
-<div class="ui <?php echo (count($usersList)>0)?'hidden':''?> warning message">
-	<div class="header">
-		Advertencia
-	</div>
-	No existen usuarios registrados
+<div class="ui <?php echo (count($categoriesList)>0)?'hidden':''?> warning message">
+	<div class="header">Advertencia	</div>
+	No existen categorías registradass
 </div>
 
 <div class="ui segment">
@@ -40,14 +38,14 @@
 			<div class="field">
 				<div class="ui action left icon input">
 					<i class="search icon"></i>
-					<input name="user" type="text" value="<?php echo $searchedUser?$searchedUser:''?>" placeholder="Introducir usuario">
+					<input name="user" type="text" value="<?php echo $searchedCategory?$searchedCategory:''?>" placeholder="Introducir usuario">
 					<div class="ui button" id="botonBusqueda">Buscar</div>
 				</div>
 			</div>
 			<div class="field">
-				<a href="admin-add-user.php">
+				<a href="admin-add-category.php">
 					<div class="ui right floated basic blue small labeled icon button">
-						<i class="plus icon"></i> Agregar usuario
+						<i class="plus icon"></i> Agregar categoría
 					</div>
 				</a>
 			</div>
@@ -59,37 +57,35 @@
 	<table class="ui selectable celled table">
 		<thead>
 			<tr>
-				<div class="ui sub header">Usuarios registrados en el sistema</div>
+				<div class="ui sub header">Categorías registradas en el sistema</div>
 			</tr>
 			<tr>
-				<th class="center aligned">Usuario</th>
-				<th class="center aligned">DNI</th>
-				<th class="center aligned">Email</th>
+				<th class="center aligned">Código</th>
 				<th class="center aligned">Nombre</th>
-				<th class="center aligned">Apellido</th>
-				<th class="center aligned">Dirección</th>
-				<th class="center aligned">Teléfono</th>
-				<th class="center aligned">Rol</th>
-				<th class="center aligned">Operaciones</th>
+				<th class="center aligned">Ver descripción</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
 				$str = '';
-				foreach($usersList as $row){
+				foreach($categoriesList as $row){
 					echo '<tr>';
 					$id;
 					foreach($row as $key=>$value){
 						if($key=="id"){
 							$id = $value;
+						}
+						else if($key=="id"){
+							echo '
+								
+							';
 							continue;
 						}
-						$lit = $value?$value:"---";
-						echo '<td class="center aligned">'.$lit.'</td>';
+						echo '<td class="center aligned">'.$value.'</td>';
 					}
 					echo 	'<td class="center aligned">
-								<a href="admin-edit-user.php?id='.$id.'"><i class="icon edit"></i></a>
-								<a class="buttonRemove" link="admin-remove-user.php?id='.$id.'"><i class="icon remove"></i></a>
+								<a data-tooltip="Editar la categoría" data-inverted="" href="admin-edit-user.php?id='.$id.'"><i class="icon edit"></i></a>
+								<a data-tooltip="Borrar la categoría" data-inverted="" class="buttonRemove" link="admin-remove-user.php?id='.$id.'"><i class="icon remove"></i></a>
 							</td>';
 					echo '</tr>';
 				}
@@ -100,7 +96,7 @@
 				<th colspan="9">
 					<a href="admin-add-user.php">
 						<div class="ui right floated basic blue small labeled icon button">
-							<i class="plus icon"></i> Agregar usuario
+							<i class="plus icon"></i> Agregar categoría
 						</div>
 					</a>
 				</th>

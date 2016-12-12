@@ -86,8 +86,8 @@
 						echo '<td class="center aligned">'.$lit.'</td>';
 					}
 					echo 	'<td class="center aligned">
-								<a href="admin-edit-user.php?id='.$id.'"><i class="icon edit"></i></a>
-								<a class="buttonRemove" link="admin-remove-user.php?id='.$id.'"><i class="icon remove"></i></a>
+								<a data-tooltip="Editar el usuario" data-inverted="" href="admin-edit-user.php?id='.$id.'"><i class="icon edit"></i></a>
+								<a data-tooltip="Borrar el usuario" data-inverted="" class="buttonRemove" link="admin-remove-user.php?id='.$id.'"><i class="icon remove"></i></a>
 							</td>';
 					echo '</tr>';
 				}

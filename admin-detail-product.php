@@ -93,7 +93,11 @@
 					</div>
 				</div>
 				<div class="ui bottom attached tab segment" data-tab="second">
-					<?php echo $productData['description']?>
+					<?php 
+						if($productData['description']) echo "<h4>No existe una descripción del producto</h4>";
+						else echo $productData['description'];
+						
+					?>
 				</div>
 				<div class="ui bottom attached tab segment" data-tab="third">
 					<?php

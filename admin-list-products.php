@@ -66,8 +66,7 @@
 				<th class="center aligned">Estado</th>
 				<th class="center aligned">Stock</th>
 				<th class="center aligned">Operaciones</th>
-				<th class="center aligned">Multimedia</th>
-				<th class="center aligned">Mas información</th>
+				<th class="center aligned">Detalles</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -81,11 +80,9 @@
 						echo '<td class="center aligned">'.$value.'</td>';
 					}
 					echo 	'<td class="center aligned">
-								<a href="admin-edit-product.php?code='.$code.'"><i class="icon edit"></i></a>
-								<a class="buttonRemove" link="admin-remove-product.php?code='.$code.'"><i class="icon remove"></i></a>
-							</td>';
-					echo 	'<td class="center aligned">
-								<a href="admin-edit-files.php?code='.$code.'">Modificar</a>
+								<a data-tooltip="Editar el producto" data-inverted="" href="admin-edit-product.php?code='.$code.'"><i class="icon edit"></i></a>
+								<a data-tooltip="Borrar el producto" data-inverted="" class="buttonRemove" link="admin-remove-product.php?code='.$code.'"><i class="icon remove"></i></a>
+								<a data-tooltip="Modificar imagenes y/o videos del producto" data-inverted="" href="admin-edit-files.php?code='.$code.'"><i class="icon image"></i></a>
 							</td>';
 					echo 	'<td class="center aligned">
 								<a href="admin-detail-product.php?code='.$code.'">Ver màs</a>
