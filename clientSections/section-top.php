@@ -18,7 +18,7 @@
 
 	<aside>
 		<?php
-			(PAGE=='index')? include("clientSections/sections/aside.php"):null 
+			if(PAGE=='index') include("clientSections/sections/aside.php"); 
 		?>
 		<?php include("clientSections/sections/cart.php") ?>
 	</aside>

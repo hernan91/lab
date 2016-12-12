@@ -14,7 +14,7 @@
 		<div class="menu">
 			<?php
 				foreach($categoriesList as $category){
-					echo '<a href="index?category='.$category["id"].'" class="item">'.$category['name'].'</a>';
+					echo '<a href="index.php?categoryId='.$category["id"].'" class="item">'.$category['name'].'</a>';
 				}
 			?>
 		</div>

@@ -145,10 +145,10 @@
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
-	function api_internal_products_getAllProductsByCategory(){
+	function api_internal_products_getAllProductsBasicDataByCategory($categoryId){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`code`, P.`name`, C.`name`, P.`description`, P.`manufacturer`, P.`price`, P.`videoExtension`, P.`state` FROM `products` AS P, `categories` AS C WHERE P.`category_code`= C.`code`";
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id` AND C.`id`='".$categoryId."'";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
