@@ -25,9 +25,7 @@
 </div>
 
 <div class="ui <?php echo (count($productsList)>0)?'hidden':''?> warning message">
-	<div class="header">
-		Advertencia
-	</div>
+	<div class="header">Advertencia</div>
 	No existen productos registrados
 </div>
 

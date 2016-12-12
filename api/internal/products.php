@@ -46,7 +46,7 @@
 	function api_internal_products_getAllProductsBasicData(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`category` AS C WHERE P.`category_code`=C.`code`";
+			$query = "SELECT P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_code`=C.`code`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -63,7 +63,7 @@
 	function api_internal_products_getAllProductData($code){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`description`, P.`manufacturer`, P.`price`, P.`videoExtension`, P.`state`, P.`stock`, C.`name` as catName FROM `products` AS P,`category` AS C WHERE P.`code`='".$code."' AND P.`category_id`=C.`id`";
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`description`, P.`manufacturer`, P.`price`, P.`videoExtension`, P.`state`, P.`stock`, C.`name` as catName FROM `products` AS P,`categories` AS C WHERE P.`code`='".$code."' AND P.`category_id`=C.`id`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -79,7 +79,7 @@
 	function api_internal_products_getAllProductsBasicTableData(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`category` AS C WHERE P.`category_id`=C.`id`";
+			$query = "SELECT P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -130,7 +130,7 @@
 	function api_internal_products_getAllProductsByCategory(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`code`, P.`name`, C.`name`, P.`description`, P.`manufacturer`, P.`price`, P.`videoExtension`, P.`state` FROM `products` AS P, `category` AS C WHERE P.`category_code`= C.`code`";
+			$query = "SELECT P.`code`, P.`name`, C.`name`, P.`description`, P.`manufacturer`, P.`price`, P.`videoExtension`, P.`state` FROM `products` AS P, `categories` AS C WHERE P.`category_code`= C.`code`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -145,7 +145,7 @@
 	function api_internal_products_getFirstImg(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`code`, P.`name`, C.`name`, P.`description`, P.`manufacturer`, P.`price`, P.`videoExtension`, P.`state` FROM `products` AS P, `category` AS C WHERE P.`category_code`= C.`code`";
+			$query = "SELECT P.`code`, P.`name`, C.`name`, P.`description`, P.`manufacturer`, P.`price`, P.`videoExtension`, P.`state` FROM `products` AS P, `categories` AS C WHERE P.`category_code`= C.`code`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -160,7 +160,7 @@
 	function api_internal_products_getAllCategoriesData(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT `id`,`name` FROM `category`";
+			$query = "SELECT `id`,`name` FROM `categories`";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
