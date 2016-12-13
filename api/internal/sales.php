@@ -80,7 +80,8 @@
 				while($r = mysqli_fetch_assoc($result)) {
 					$rows[] = $r;
 				}
-				return $rows[0]['quantity'];
+				if(isset($rows[0])) return $rows[0]['quantity']; 
+				return false;
 			}
 			throw new Exception("No existen productos.");
 		}
@@ -104,13 +105,14 @@
 	function api_internal_sales_getUnfinishedSaleId($userId){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT S.`id` FROM `bills` AS B, `sales` AS S WHERE S.`id_user`='.$userId.' AND S.`selled`=0 AND S.`id`=B.`id_sale`";
+			$query = "SELECT `id` FROM `sales` WHERE `id_user`='.$userId.' AND `selled`=0";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
 					$rows[] = $r;
 				}
-				return $rows[0]['id'];
+				if(isset($rows[0])) return $rows[0]['id']; 
+				return false;
 			}
 			throw new Exception("No existen productos.");
 		}
@@ -145,7 +147,7 @@
 	function api_internal_sales_removeProductFormBill($productId, $saleId){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "DELETE FROM `bills` WHERE `id_product`='".$productId."', AND `id_sale`='".$saleId."'";
+			$query = "DELETE FROM `bills` WHERE `id_product`='".$productId."' AND `id_sale`='".$saleId."'";
 			$result = $con->query($query);
 			if($result) return $result;
 			throw new Exception("No se pudo remover el producto del carrito");
@@ -177,7 +179,8 @@
 				while($r = mysqli_fetch_assoc($result)) {
 					$rows[] = $r;
 				}
-				return $rows[0]['email'];
+				if(isset($rows[0])) return $rows[0]['email']; 
+				return false;
 			}
 			throw new Exception("No existen productos.");
 		}
@@ -197,11 +200,13 @@
 			if(!api_internal_sales_newUnfinishedSale($userId)) return $error = "No se pudo completar la operación";
 		}
 		$saleId = api_internal_sales_getUnfinishedSaleId($userId);
+		if($saleId==false) return $error = "No se pudo completar la operación";
 		if(!api_internal_sales_productExistsInBills($productId, $userId)){
 			if(!api_internal_sales_newProductInBills($productId, $saleId, $quantity)) return $error = "No se pudo completar la operación";
 		}
 		else{
 			$actualQuantity = api_internal_sales_getProductBillQuantity($productId, $saleId);
+			if($actualQuantity==false) return $error = "No se pudo completar la operación";
 			$newQuantity = $actualQuantity + $quantity;
 			if(!api_internal_sales_modifyQuantityBill($productId, $newQuantity, $saleId)) return $error = "No se pudo completar la operación";	
 		}
@@ -209,9 +214,10 @@
 	}
 
 	function api_internal_sales_RemoveProductFromCart($userId, $productId){
-		$error = arrray();
-		if(!api_internal_sales_unfinishedSaleExists($userId)) return $error = "No existe ese producto en el carrito";
+		$error = "";
+		if(!api_internal_sales_unfinishedSaleExists($userId)) return $error = "No se pudo completar la operación";
 		$saleId = api_internal_sales_getUnfinishedSaleId($userId);
+		if($saleId==false) return $error = "No se pudo completar la operación";
 		if(!api_internal_sales_productExistsInBills($productId, $userId)) return $error = "No se pudo completar la operación";
 		if(!api_internal_sales_removeProductFormBill($productId, $saleId)) return $error = "No se pudo completar la operación";
 		return true;

@@ -28,7 +28,7 @@
 					</div>
 				</div>
 				<div class="content">
-					<a class="header">'.$name.'</a>
+					<a href="client-detail-product.php?code='.$code.'" class="header">'.$name.'</a>
 					<div class="meta">
 					'.$tagPrice.'
 					</div>

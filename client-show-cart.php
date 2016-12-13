@@ -11,7 +11,7 @@
 ?>
 <?php
 	//$userId = $_SESSION['id'];
-	$listOfProducts = api_internal_sales_getAllUnfinishedProductsBillsByUser($session_userId);  
+	$listOfProducts = api_internal_sales_getAllUnfinishedProductsBillsByUser($session_userId);
 	$success = isset($_GET['success']);
 	$error = isset($_GET['error']);
 
@@ -52,7 +52,7 @@
 </div>
 
 <div class="ui <?php echo (count($listOfProducts)>0)?'hidden':''?> warning message">
-	<div class="header">Advertencia	</div>No existen productos registrados
+	<div class="header">Advertencia	</div>No se han agregado productos al carrito
 </div>
 
 <div style="padding-bottom:50px" class="ui segment">
@@ -82,6 +82,9 @@
 					
 					foreach($product as $key=>$value){
 						if($key=="sale_id" || $key=="product_id") continue;
+						if($key=="product_name"){
+							echo '<td class="center aligned"><a href="client-detail-product.php?code='.$product["product_code"].'">'.$value.'</a></td>';	
+						}
 						echo '<td class="center aligned">'.$value.'</td>';
 					}
 					echo 	'<td class="center aligned">
@@ -98,11 +101,12 @@
 			</tr>
 		</tfoot>
 	</table>
-	<a class="buttonCompra" href="client-show-cart.php?operation=end">
+	<a style="display: <?php echo (count($listOfProducts)>0)?'inline':'none'?>" class="disable buttonCompra" href="client-show-cart.php?operation=end">
 		<div class="ui right floated basic blue small labeled icon button">
 			<i class="check icon"></i> Finalizar compra
 		</div>
 	</a>
+	
 </div>
 <?php include("clientSections/section-bottom.php") ?>
 <script>

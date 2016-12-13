@@ -6,10 +6,10 @@
 	<link rel="stylesheet" href="css/loginStyle.css">
 </head>
 
-<body>
-	<div class="ui middle aligned center aligned grid">
-		<div class="column">
-			<h2 class="ui teal image header">
+<body style="background-color: #E9E9E9">
+	<div style="height: 100%" class="ui middle aligned center aligned grid">
+		<div style="max-width: 450px" class="column">
+			<h2 class="ui image header">
 			<div class="content">
 				Ingrese a TecnoStore
 			</div>
@@ -28,7 +28,7 @@
 						<input type="password" name="password" placeholder="Password">
 					</div>
 					</div>
-					<div class="ui fluid large teal submit button">Entrar</div>
+					<div class="ui fluid large black submit button">Entrar</div>
 				</div>
 
 				<div class="ui error message"></div>
@@ -36,5 +36,4 @@
 		</div>
 	</div>
 </div>
-
 </body>
