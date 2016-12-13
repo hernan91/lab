@@ -114,8 +114,9 @@
 		<div class="row">
 			<div>
 				<div class="ui left action input" style="margin-left:20px;">
-					<form id="addToCartForm" action="client-add-cart">
-						<input type="hidden" name="id" value="<?php echo $productData['id'] ?>">
+					<form id="addToCartForm" action="client-show-cart.php">
+						<input type="hidden" name="operation" value="add">
+						<input type="hidden" name="productId" value="<?php echo $productData['id'] ?>">
 						<button id="addToCartButton" class="ui black labeled icon button">
 							<i class="cart icon"></i>Agregar al carrito
 						</button>

@@ -5,8 +5,9 @@
 		if($registered){
 			$tagAddToCart = '
 				<div style="margin-left:55px" class="ui left action input">
-					<form action="client-add-cart">
-						<input type="hidden" name="id" value="'.$id.'">
+					<form action="client-show-cart.php">
+						<input type="hidden" name="operation" value="add">
+						<input type="hidden" name="productId" value="'.$id.'">
 						<a class="addToCartAnchor"><i class="cart icon"></i>Agregar</a>
 						<input name="quantity" style="padding: 2px; width:50px" type="number" value="1" min="1" max="'.$stock.'">
 					</form>

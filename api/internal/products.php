@@ -203,7 +203,7 @@
 	function api_internal_products_getMostSelledProducts(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock`, SUM(B.`quantity`) as quantity FROM `products` AS P, `bills` AS B, `categories` AS C WHERE C.`id` = P.`category_id` AND B.`id_product`=P.`id` AND B.`id_sale` IN (SELECT `id` FROM `sales` WHERE `selled`=1 ) GROUP BY `id_product` ORDER BY quantity DESC";
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock`, SUM(B.`quantity`) as quantity FROM `products` AS P, `bills` AS B, `categories` AS C WHERE C.`id` = P.`category_id` AND B.`id_product`=P.`id` AND B.`id_sale` IN (SELECT `id` FROM `sales` WHERE `selled`=1 AND `state`='Activo' ) GROUP BY `id_product` ORDER BY quantity DESC";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {

@@ -1,12 +1,30 @@
 <?php
 	
 	include_once 'api/connection.php';
+	include_once 'api/internal/mail.php';
 	
 	//Trae datos de productos del carrito (no vendidos) correspondientes a un usuario
-	function api_internal_sales_getAllProductsSalesHistoric($userId){
+	/*function api_internal_sales_getAllProductsSalesHistoric($userId){
 		$con = new Conexion();
 		if($con->connect()){
 			$query = "SELECT S.`id`, P.`id`, P.`code`, P.`name`, P.`price`, P.`manufacturer`, B.`quantity`, S.`date` FROM `products` AS P, `bills` AS B, `sales` AS S WHERE P.`id` = B.`id_product` AND S.`id` = B.`id_sale` AND S.`id_user` = '15' AND S.`selled` = '.$userId.'";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows;
+			}
+			throw new Exception("No existen productos.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}*/
+
+	function api_internal_sales_getAllFinishedProductsBillsByUser($userId){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT S.`id` AS sale_id, P.`id` AS product_id, P.`code` as product_code, P.`name` as product_name, P.`price` as product_price, P.`manufacturer` as product_manufacturer, B.`quantity` as quantity, S.`date` as date FROM `products` AS P, `bills` AS B, `sales` AS S WHERE P.`id` = B.`id_product` AND S.`id` = B.`id_sale` AND S.`id_user` = '15' AND S.`selled` = '0'";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -23,7 +41,7 @@
 	function api_internal_sales_getAllUnfinishedProductsBillsByUser($userId){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT S.`id` AS sale_id, P.`id` AS product_id, P.`code` as product_code, P.`name` as product_name, P.`price` as product_price, P.`manufacturer` as product_manufacturer, B.`quantity` as quantity FROM `products` AS P, `bills` AS B, `sales` AS S WHERE P.`id` = B.`id_product` AND S.`id` = B.`id_sale` AND S.`id_user` = '15' AND S.`selled` = '0'";
+			$query = "SELECT S.`id` AS sale_id, P.`id` AS product_id, P.`code` as product_code, P.`name` as product_name, P.`manufacturer` as product_manufacturer, P.`price` as product_price, B.`quantity` as quantity FROM `products` AS P, `bills` AS B, `sales` AS S WHERE P.`id` = B.`id_product` AND S.`id` = B.`id_sale` AND S.`id_user` = '15' AND S.`selled` = '0'";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -157,10 +175,29 @@
 	function api_internal_sales_setFinishedSale($saleId){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "UPDATE `bills` SET `selled`='1' WHERE `id_sale`='".$saleId."'";
+			$date = date('Y-m-d H:i:s');
+			$query = "UPDATE `sales` SET `selled`='1', `date`='".$date."' WHERE `id_sale`='".$saleId."'";
 			$result = $con->query($query);
 			if($result) return $result;
 			throw new Exception("No se pudo modificar el usuario");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
+	//va en users pero para ahorrar includes
+	function api_internal_users_getEmail($userId){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT `email` FROM `users`WHERE `id`='.$userId.'";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows[0]['email'];
+			}
+			throw new Exception("No existen productos.");
 		}
 		$con->close();
 		throw new Exception("Imposible conectarse a la base de datos.");
@@ -200,20 +237,21 @@
 
 	function api_internal_sales_finishSale($userId){
 		$errors = arrray();
+		if(!api_internal_sales_unfinishedSaleExists($userId)) return $errors[] = "No se pudo completar la operación";
 		$listOfUnfinishedBills = api_internal_sales_getAllUnfinishedProductsBillsByUser($userId);
+		$saleId = $bill['sale_id'];
+		
 		foreach($listOfUnfinishedBills as $bill){
 			$productStock = api_internal_products_getProductStock($bill['product_id']);
 			if($bill['quantity']>$productStock) return $errors[] = "No existe stock suficiente para comprar ".$bill['product_name']; 
-			if(!api_internal_sales_unfinishedSaleExists($userId)) return $errors[] = "No se pudo completar la operación";
-			$saleId = $bill['sale_id'];
 			$newStock = $productStock-$bill['quantity'];	
 			if(!api_internal_sales_productExistsInBills($productId, $userId)) return $errors[] = "No existe el producto en el carrito de compras";
-			if(!api_internal_sales_setFinishedSale($saleId)) return $errors[] = "No se pudo finalizar la compra";;
 			if(!api_internal_product_updateProductStock($productId, $newStock)) return $errors[] = "Se finalizo la compra pero no se pudo actualizar el stock del producto";
-			api_internal_mail_sendMail();
-		}		
+		}
+
+		if(!api_internal_sales_setFinishedSale($saleId)) return $errors[] = "No se pudo finalizar la compra";
+		$userEmail = api_internal_users_getEmail($userId);
+		if(!api_internal_mail_sendMail($userEmail)) return $errors[] ="Se finalizo la compra pero no se mando el mail";
 		return true;
 	}
-
-	
 ?>

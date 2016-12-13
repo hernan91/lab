@@ -1,33 +1,21 @@
-<?php define('PAGE', "client-show-cart") ?>
-
-	<?php 
-		include("clientSections/section-top.php"); 
-	?>
-
-	
-	<div class="ui segment">
-		
-	</div>
-	
-	<?php include("clientSections/section-bottom.php") ?>
-
-<script>
-	
-</script>
-
-<?php define('PAGE', "admin-show-cart") ?>
+<?php 
+	define('PAGE', "client-show-cart");
+	include_once 'api/session.php';
+?>
 <?php 
 	include("clientSections/section-top.php"); 
 	include_once("api/internal/sales.php");
 	include_once 'components/modalConfirm.php';
-	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea eliminar este producto del carrito?", "modalConfirmacion");
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea eliminar este producto del carrito?", "modalConfirmacionEliminarProducto");
+	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea finalizar la compra?", "modalConfirmacionFinalizarCompra");
 ?>
 <?php
-	$userId = $_SESSION['id'];
-	$listOfProducts =  
-	$categoriesList = api_internal_categories_getAllCategoriesData();
+	//$userId = $_SESSION['id'];
+	$listOfProducts = api_internal_sales_getAllUnfinishedProductsBillsByUser($session_userId);  
 	$success = isset($_GET['success']);
 	$error = isset($_GET['error']);
+
+	
 ?>
 
 <div class="ui <?php echo $success?"":"hidden" ?> success message">
@@ -42,133 +30,87 @@
 	<p><?php echo $error?$_GET['error']:""?></p>
 </div>
 
-<div class="ui <?php echo (count($categoriesList)>0)?'hidden':''?> warning message">
-	<div class="header">Advertencia	</div>
-	No existen categorías registradass
+<div class="ui <?php echo (count($listOfProducts)>0)?'hidden':''?> warning message">
+	<div class="header">Advertencia	</div>No existen productos registrados
 </div>
 
-<div class="ui segment">
-	<div class="ui sub header">Filtro</div>
-	<form class="ui form" id="formFiltro">
-		<div class="inline fields">
-			<div class="field">
-				<div class="ui action left icon input">
-					<i class="search icon"></i>
-					<input name="user" type="text" value="<?php echo $searchedCategory?$searchedCategory:''?>" placeholder="Introducir usuario">
-					<div class="ui button" id="botonBusqueda">Buscar</div>
-				</div>
-			</div>
-			<div class="field">
-				<a href="admin-add-category.php">
-					<div class="ui right floated basic blue small labeled icon button">
-						<i class="plus icon"></i> Agregar categoría
-					</div>
-				</a>
-			</div>
-		</div>
-	</form>
-
-	<div class="ui clearing horizontal divider">-</div>
-
+<div style="padding-bottom:50px" class="ui segment">
 	<table class="ui selectable celled table">
 		<thead>
 			<tr>
-				<div class="ui sub header">Categorías registradas en el sistema</div>
+				<div class="ui sub header">Productos agregados al carro de compras</div>
 			</tr>
 			<tr>
-				<th class="center aligned">Código</th>
-				<th class="center aligned">Nombre</th>
-				<th class="center aligned">Ver descripción</th>
+				<th class="center aligned">Código de producto</th>
+				<th class="center aligned">Nombre de producto</th>
+				<th class="center aligned">Fabricante</th>
+				<th class="center aligned">Precio</th>
+				<th class="center aligned">Cantidad</th>
 				<th class="center aligned">Operaciones</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
-				$str = '';
-				foreach($categoriesList as $row){
+				$totalPrice = 0;
+				foreach($listOfProducts as $product){
 					echo '<tr>';
-					$id;
-					foreach($row as $key=>$value){
-						if($key=="id"){
-							$id = $value;
-							continue;
-						}
-						else if($key=="description"){
-							echo'
-								<td class="center aligned">
-									<a data-id="'.$id.'" href="" class="buttonDescription">Ver descripción</a>
-								</td>
-							';
-							echo '
-							
-								<div id="modal'.$id.'" class="description ui modal">
-									<i class="close icon"></i>
-									<div class="header">
-										Descripcion de la categoría
-									</div>
-									<div class="image content">
-										<h4>'.($value?$value:"No existe una descripción para esta categoría").'</h4>
-									</div>
-									<div class="actions">
-										<div class="ui black deny button">Cerrar</div>
-									</div>
-								</div>
-							';
-							continue;
-						}
+					$saleId = $product['sale_id'];
+					$productId = $product['product_id'];
+					$price = $product['product_price'];
+					$quantity = $product['quantity'];
+					
+					foreach($product as $key=>$value){
+						if($key=="sale_id" || $key=="product_id") continue;
 						echo '<td class="center aligned">'.$value.'</td>';
 					}
 					echo 	'<td class="center aligned">
-								<a data-tooltip="Editar la categoría" data-inverted="" href="admin-edit-category.php?id='.$id.'"><i class="icon edit"></i></a>
-								<a data-tooltip="Borrar la categoría" data-inverted="" class="buttonRemove" link="admin-remove-category.php?id='.$id.'"><i class="icon remove"></i></a>
+								<a data-tooltip="Borrar el producto del carro" data-inverted="" class="buttonRemove" link="client-show-cart.php?operation=remove&productId='.$productId.'&saleId='.$saleId.'"><i class="icon remove"></i></a>
 							</td>';
 					echo '</tr>';
+					$totalPrice = $totalPrice + $price*$quantity;
 				}
 			?>
 		</tbody>
-		<tfoot class="full-width">
+		<tfoot align="right" class="full-width">
 			<tr>
-				<th colspan="9">
-					<a href="admin-add-category.php">
-						<div class="ui right floated basic blue small labeled icon button">
-							<i class="plus icon"></i> Agregar categoría
-						</div>
-					</a>
-				</th>
+				<th colspan="6"><h3 style="display:inline">Total</h3><span><?php echo ' $'.$totalPrice?></span></th>
 			</tr>
 		</tfoot>
 	</table>
+	<a class="buttonCompra" href="client-show-cart.php?operation=end">
+						<div class="ui right floated basic blue small labeled icon button">
+							<i class="check icon"></i> Finalizar compra
+						</div>
+					</a>
 </div>
 <?php include("clientSections/section-bottom.php") ?>
 <script>
 	$(function(){
 		let link;
-		$('#modalConfirmacion.ui.basic.modal').modal({
+		$('#modalConfirmacionEliminarProducto.ui.basic.modal').modal({
 			closable: false,
 			onApprove: function(e){
 				window.location = link;
 			}
 		});
+		$('#modalConfirmacionFinalizarCompra.ui.basic.modal').modal({
+			closable: false,
+			onApprove: function(e){
+				window.location = "client-show-cart.php?operation=end";
+			}
+		});
 		$('.buttonRemove').click(function(e){
 			e.preventDefault();
 			link = e.target.parentElement.getAttribute('link');
-			$('#modalConfirmacion.ui.basic.modal').modal('show');
+			$('#modalConfirmacionEliminarProducto.ui.basic.modal').modal('show');
+		});
+		$('.buttonCompra').click(function(e){
+			e.preventDefault();
+			$('#modalConfirmacionFinalizarCompra.ui.basic.modal').modal('show');
 		});
 		$('.message .close').on('click', function() {
 			$(this).closest('.message').transition('fade');
 		});
-		$('#buscarDrop.ui.dropdown').dropdown();
-		$('#botonBusqueda').click(function(e){
-			e.preventDefault();
-			$('form#formFiltro').submit();
-		});
-
-		$('.buttonDescription').click(function(e){
-			e.preventDefault();
-			let id = $(e.target).attr('data-id');
-			$('#modal'+id+'.description.ui.modal').modal('show');	
-		});
-		
 	});
 </script>
 <?php 
