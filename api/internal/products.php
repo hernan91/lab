@@ -63,7 +63,7 @@
 	function api_internal_products_getAllProductsBasicData(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id`";
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id` AND P.`state`='Activo'";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -212,6 +212,35 @@
 				return $rows;
 			}
 			throw new Exception("No existen productos");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
+	function api_internal_products_getProductStock($productId){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT `stock` FROM `products` WHERE `id`='".$productId."'";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows[0]['stock'];
+			}
+			throw new Exception("No existe el producto.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
+	function api_internal_product_updateProductStock($productId, $newStock){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "UPDATE `products` SET `stock`='".$newStock."' WHERE `id`='".$productId."'";
+			$result = $con->query($query);
+			if($result) return $result;
+			throw new Exception("No se pudo modificar el usuario");
 		}
 		$con->close();
 		throw new Exception("Imposible conectarse a la base de datos.");

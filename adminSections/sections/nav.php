@@ -1,6 +1,6 @@
 <div class="ui inverted top fixed menu">
 	<div class="item">
-		<h3>SportStore ADMIN</h3>
+		<h3>TecnoStore ADMIN</h3>
 	</div>
 	<a class="item <?php echo (PAGE=='admin-list-users')?'active':'' ?>" href="admin-list-users.php">Listar usuarios</a>
 	<div class="ui dropdown item" id="dropProductosNav"> <!--<?php echo (PAGE=='admin-list-products' || PAGE=='admin-list-categories')?'active':'' ?>-->

@@ -33,7 +33,7 @@
 				if(isset($mostSelledProductsList)){
 					foreach($mostSelledProductsList as $selledProduct){
 						$firstImage = api_internal_products_getFirstImg($selledProduct['id']);
-						components_cardProductMostSelled($selledProduct['id'], $selledProduct['name'], $selledProduct['code'], $selledProduct['manufacturer'], $selledProduct['catName'], $selledProduct['price'], $firstImage['id'], $firstImage['extension'], $selledProduct['quantity'], true);
+						components_cardProductMostSelled($selledProduct['id'], $selledProduct['name'], $selledProduct['code'], $selledProduct['manufacturer'], $selledProduct['catName'], $selledProduct['price'], $firstImage['id'], $firstImage['extension'], $selledProduct['quantity'], $selledProduct['stock'], true);
 					}
 				}
 				else if(isset($categoryProductsList)){
@@ -41,7 +41,7 @@
 					else{
 						foreach($categoryProductsList as $categoryProduct){
 							$firstImage = api_internal_products_getFirstImg($categoryProduct['id']);
-							components_cardProduct($categoryProduct['id'], $categoryProduct['name'], $categoryProduct['code'], $categoryProduct['manufacturer'], $categoryProduct['catName'], $categoryProduct['price'], $firstImage['id'], $firstImage['extension'], true);
+							components_cardProduct($categoryProduct['id'], $categoryProduct['name'], $categoryProduct['code'], $categoryProduct['manufacturer'], $categoryProduct['catName'], $categoryProduct['price'], $firstImage['id'], $firstImage['extension'], $categoryProduct['stock'], true);
 						}
 					}
 				}
@@ -57,7 +57,7 @@
 				if(isset($allProductsList)){
 					foreach($allProductsList as $product){
 						$firstImage = api_internal_products_getFirstImg($product['id']);
-						components_cardProduct($product['id'], $product['name'], $product['code'], $product['manufacturer'], $product['catName'], $product['price'], $firstImage['id'], $firstImage['extension'], true);
+						components_cardProduct($product['id'], $product['name'], $product['code'], $product['manufacturer'], $product['catName'], $product['price'], $firstImage['id'], $firstImage['extension'], $product['stock'], true);
 					}
 				}
 			?>

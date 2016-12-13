@@ -21,5 +21,5 @@
 		<?php include("adminSections/sections/aside.php") ?>
 	</aside>
 
-	<section>
+	<section style="margin-top:100px">
 		<div class="ui container">

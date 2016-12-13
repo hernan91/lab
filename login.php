@@ -12,7 +12,7 @@
 		<div class="column">
 			<h2 class="ui teal image header">
 			<div class="content">
-				Ingrese a SportStore
+				Ingrese a TecnoStore
 			</div>
 			</h2>
 			<form class="ui large form">

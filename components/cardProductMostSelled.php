@@ -1,14 +1,14 @@
 <?php
-	function components_cardProductMostSelled($id, $name, $code, $manufacturer, $category, $price, $imgId, $imgExtension, $selled, $registered){
+	function components_cardProductMostSelled($id, $name, $code, $manufacturer, $category, $price, $imgId, $imgExtension, $selled, $stock, $registered){
 		$tagPrice = $registered?'<span class="date">$'.$price.'</span>':"";
 		$tagAddToCart = "";
 		if($registered){
 			$tagAddToCart = '
-				<div style="margin-left:85px" class="ui left action input">
+				<div style="margin-left:55px" class="ui left action input">
 					<form action="client-add-cart">
 						<input type="hidden" name="id" value="'.$id.'">
 						<a class="addToCartAnchor"><i class="cart icon"></i>Agregar</a>
-						<input name="quantity" style="padding: 2px; width:30px" type="number" value="1" min="1">
+						<input name="quantity" style="padding: 2px; width:50px" type="number" value="1" min="1" max="'.$stock.'">
 					</form>
 				</div>
 			';
@@ -34,6 +34,7 @@
 				</div>
 				<div class="extra content">
 					'.$tagSelled.'
+					<div style="display:inline; margin-left:50px">En stock: '.$stock.'</div>
 					<div class="ui divider"></div>
 					<a href="client-detail-product.php?code='.$code.'"><i class="add icon"></i>Ver mas</a>
 					'.$tagAddToCart.'
