@@ -7,10 +7,16 @@
 
 <div class="ui vertical fixed menu" style="margin-top:100px">
 	<div class="item">
-		<div class="ui input"><input type="text" placeholder="Buscar producto..."></div>
+		<h3 class="ui header">Productos</h3>	
 	</div>
 	<div class="item">
-		Categorias
+		<div class="ui input"><input type="text" placeholder="Buscar producto..."></div>
+	</div>
+	<a href="index.php" class="item">
+		Todas las categorías
+	</a>
+	<div class="item">
+		Por categorias
 		<div class="menu">
 			<?php
 				foreach($categoriesList as $category){
@@ -19,7 +25,7 @@
 			?>
 		</div>
 	</div>
-	<a class="item">
+	<!--<a class="item">
 		<i class="grid layout icon"></i> Browse
 	</a>
 	<a class="item">
@@ -33,5 +39,5 @@
 			<a class="item"><i class="globe icon"></i> Choose Language</a>
 			<a class="item"><i class="settings icon"></i> Account Settings</a>
 		</div>
-	</div>
+	</div>-->
 </div>

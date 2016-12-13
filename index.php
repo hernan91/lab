@@ -7,6 +7,7 @@
 		include_once 'api/internal/products.php';
 		include_once 'api/internal/categories.php';
 		include_once 'components/modalConfirm.php';
+		components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea agregar este producto al carrito?", "modalConfirmacion");
 		
 		$mostSelledProductsList;
 		$categoryProductsList;
@@ -19,7 +20,7 @@
 			$categoryId = $_GET['categoryId'];
 			$categoryData = api_internal_categories_getCategoryData($categoryId);
 			$categoryProductsList = api_internal_products_getAllProductsBasicDataByCategory($categoryId);
-			$title = 'Productos de la categoría'.$categoryData['name'];
+			$title = 'Productos de la categoría '.$categoryData['name'];
 		}
 		
 		$registered = true;
@@ -49,8 +50,8 @@
 	</div>
 	<div style="margin-top:100px;"></div>
 	<div class="ui raised segment">
-		<h3 class="ui header"><?php isset($allProductsList)?"Todos los productos":"" ?></h3>
-		<div class="ui cards">
+		<h3 class="ui header"><?php echo isset($allProductsList)?"Todos los productos":"" ?></h3>
+		<div class="ui four cards">
 			<?php
 				//falta manejo sesion
 				if(isset($allProductsList)){
@@ -66,9 +67,16 @@
 	<?php include("clientSections/section-bottom.php") ?>
 
 <script>
+	let addToCartForm;
+	$('#modalConfirmacion.ui.basic.modal').modal({
+		closable: false,
+		onApprove: function(){
+			addToCartForm.submit();
+		}
+	});
 	$('.addToCartAnchor').click(function(e){
 		e.preventDefault();
-		console.log($('e.target.parent'));
-		$(e.target).parents('form').submit();
+		addToCartForm = $(e.target).parents('form');
+		$('#modalConfirmacion.ui.basic.modal').modal('show');
 	});
 </script>

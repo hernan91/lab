@@ -8,8 +8,8 @@
 		$tagAddToCart = "";
 		if($registered){
 			$tagAddToCart = '
-				<div style="margin-left:85px" class="ui left action input">
-					<form id="addToCartForm"action="cart-add-product">
+				<div style="margin-left:56px" class="ui left action input">
+					<form id="addToCartForm" action="client-add-cart">
 						<input type="hidden" name="id" value="'.$id.'">
 						<a class="addToCartAnchor"><i class="cart icon"></i>Agregar</a>
 						<input name="quantity" style="padding: 2px; width:30px" type="number" value="1" min="1">
@@ -36,7 +36,7 @@
 					</div>
 				</div>
 				<div class="extra content">
-					<a><i class="add icon"></i>Ver mas</a>
+					<a href="client-detail-product.php?code='.$code.'" class="seeMore"><i class="add icon"></i>Ver mas</a>
 					'.$tagAddToCart.'
 				</div>
 			</div>

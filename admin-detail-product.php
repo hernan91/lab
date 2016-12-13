@@ -1,4 +1,4 @@
-<?php define('PAGE', "admin-detail-products") ?>
+<?php define('PAGE', "admin-detail-product") ?>
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/products.php");
@@ -94,7 +94,7 @@
 				</div>
 				<div class="ui bottom attached tab segment" data-tab="second">
 					<?php 
-						if($productData['description']) echo "<h4>No existe una descripción del producto</h4>";
+						if(!$productData['description']) echo "<h4>No existe una descripción del producto</h4>";
 						else echo $productData['description'];
 						
 					?>
