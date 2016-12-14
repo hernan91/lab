@@ -4,10 +4,33 @@
 	include_once 'api/internal/mail.php';
 	include_once 'api/internal/products.php';
 	
+	function api_internal_sales_getAllBillsDataBySale($saleId){
+		
+	}
+
+	function api_internal_sales_getAllFinishedSalesByUser($userId){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT `id`,`date` FROM `sales` WHERE `id_user`='15' AND `selled`=1";
+			echo $query;
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows;
+			}
+			throw new Exception("No existen productos.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
 	function api_internal_sales_getAllFinishedProductsBillsByUser($userId){
 		$con = new Conexion();
 		if($con->connect()){
 			$query = "SELECT S.`id` AS sale_id, P.`id` AS product_id, P.`code` as product_code, P.`name` as product_name, P.`manufacturer` as product_manufacturer, P.`price` as product_price, B.`quantity` as quantity, S.`date` as date FROM `products` AS P, `bills` AS B, `sales` AS S WHERE P.`id` = B.`id_product` AND S.`id` = B.`id_sale` AND S.`id_user` = '15' AND S.`selled` = '0'";
+			echo $query;
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {

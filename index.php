@@ -1,4 +1,8 @@
-<?php define('PAGE', "index") ?>
+<?php 
+	define('PAGE', "index"); 
+	define('LEVEL', 1);
+	include_once 'api/auth.php';
+?>
 
 	<?php 
 		include("clientSections/section-top.php");

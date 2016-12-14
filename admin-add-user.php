@@ -1,4 +1,10 @@
-<?php define('PAGE', "admin-add-users") ?>
+<?php 
+	define('PAGE', "admin-add-user");
+	define('LEVEL', 2);
+	include_once 'api/auth.php';
+?> 
+	
+	?>
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/users.php");

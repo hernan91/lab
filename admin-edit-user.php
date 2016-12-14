@@ -1,4 +1,9 @@
-<?php define('PAGE', "admin-edit-users") ?>
+<?php 
+	define('PAGE', "admin-edit-user");
+	define('LEVEL', 2);
+	include_once 'api/auth.php';
+?>
+?>
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/users.php");

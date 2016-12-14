@@ -1,5 +1,7 @@
 <?php
 	include_once 'api/internal/users.php';
+	define('LEVEL', 2);
+	include_once 'api/auth.php';
 
 	if(isset($_GET['id'])){
 		$id = $_GET['id'];

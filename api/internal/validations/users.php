@@ -39,6 +39,18 @@
 		return $errors;
 	}
 
+	function validations_users_validUploadDataUser($id, $email, $direction, $phone){
+		$errors = array();
+		if(empty($email)) $errors[] = 'Por favor, ingrese un email';
+		if(!empty($email)){
+			if(!validEmail($email)) $errors[] = $email.' no es una dirección de correo válida';
+			else if(!validations_users_emailBelongsUser($id, $email)) $errors[] = 'La direccion de correo esta en uso';
+		}
+		if(empty($phone)) $errors[] = 'Por favor, ingrese un teléfono de contacto';
+		if(!empty($phone) && strlen($phone)<5) $errors[] = 'Por favor, ingrese un teléfono de contacto válido';
+		if(empty($direction)) $errors[] = 'Por favor, ingrese un email de contacto';
+		return $errors;
+	}
 
 
 	///////////////////////////////

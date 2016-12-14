@@ -3,22 +3,27 @@
 	<a href="index.php" class="active item">
 		Inicio
 	</a>
-	<a class="item">
-		Messages
-	</a>
-	<a class="item">
-		Friends
-	</a>
 	<div class="right menu">
-		<a class="ui item">
-			Ingresar
-		</a>
-		<a class="ui item">
-			Bienvenido TAL
-		</a>
-		<a class="ui item">
-			Salir
-		</a>
+		
+		<?php
+			if(isset($_SESSION['name'])){
+				echo '
+					<div class="ui item">
+						Bienvenido '.$_SESSION['name'].' 
+					</div>
+					<a href="api/logout.php"class="ui item">
+						Salir
+					</a>
+				';
+			}
+			else{
+				echo '
+					<a href="login.php" class="ui item">
+						Ingresar
+					</a>
+				';
+			}
+		?>
 	</div>
 	</div>
 </div>

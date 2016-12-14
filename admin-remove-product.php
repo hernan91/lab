@@ -1,4 +1,7 @@
 <?php
+	define('LEVEL', 2);
+	include_once 'api/auth.php';
+	
 	include_once 'api/internal/products.php';
 
 	if(isset($_GET['code'])){

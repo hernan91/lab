@@ -1,4 +1,8 @@
-<?php define('PAGE', "client-detail-product") ?>
+<?php 
+	define('PAGE', "client-detail-product"); 
+	define('LEVEL', 1);
+	include_once 'api/auth.php';
+?>
 <?php 
 	include("clientSections/section-top.php");
 	include_once("api/internal/products.php");
@@ -120,7 +124,7 @@
 						<button id="addToCartButton" class="ui black labeled icon button">
 							<i class="cart icon"></i>Agregar al carrito
 						</button>
-						<input style="border-color:black; width:60px" name="quantity" type="number" min="1" value="1">
+						<input style="border-color:black; width:60px" name="quantity" type="number" min="1" value="1" max="<?php echo $productData['stock']?>">
 					</form>
 				</div>
 			</div>

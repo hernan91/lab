@@ -1,4 +1,8 @@
-<?php define('PAGE', "admin-edit-category") ?>
+<?php 
+	define('PAGE', "admin-edit-category");
+	define('LEVEL', 2);
+	include_once 'api/auth.php';	
+?>
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/categories.php");

@@ -1,4 +1,8 @@
-<?php define('PAGE', "admin-add-product") ?>
+<?php 
+	define('PAGE', "admin-add-product"); 
+	define('LEVEL', 2);
+	include_once 'api/auth.php';
+?>
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/products.php");

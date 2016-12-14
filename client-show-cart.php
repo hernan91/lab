@@ -1,6 +1,7 @@
 <?php 
 	define('PAGE', "client-show-cart");
-	include_once 'api/session.php';
+	define('LEVEL', 1);
+	include_once 'api/auth.php';
 ?>
 <?php 
 	include("clientSections/section-top.php"); 

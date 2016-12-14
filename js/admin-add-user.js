@@ -55,7 +55,7 @@ $(function(){
 						prompt : 'Por favor, ingrese una contraseña'
 					},{
 						type	: 'minLength[6]',
-						promt	: 'La contraseña debe tener al menos 6 caracteres'
+						prompt	: 'La contraseña debe tener al menos 6 caracteres'
 					}]
 				},
 				confPassword: {

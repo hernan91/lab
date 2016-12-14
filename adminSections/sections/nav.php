@@ -14,8 +14,7 @@
 	</div>
 
 	<div class="right menu">
-		<a class="item">Cerrar sesión</a>
-		<a class="item">Salir</a>
+		<a href="api/logout.php" class="item">Salir</a>
 	</div>
 </div>
 <script>

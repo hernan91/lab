@@ -2,6 +2,20 @@
 	include_once 'api/connection.php';
 	include_once 'api/internal/validations/users.php';
 
+	function api_internal_users_newUploadData($id, $email, $direction, $phone){
+		$errors = validations_users_validUploadDataUser($id, $email, $direction, $phone);
+		if(count($errors)>0) return $errors;
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "UPDATE `users` SET `email`='".$email."', `direction`='".$direction."', `phone`='".$phone."' WHERE `id`='".$id."'";
+			$result = $con->query($query);
+			if($result) return $result;
+			throw new Exception("No se pudo modificar el usuario");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
 	function api_internal_users_getUserData($id){
 		$con = new Conexion();
 		if($con->connect()){
