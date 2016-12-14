@@ -77,6 +77,23 @@
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
+	function api_internal_products_getAllAvailableProductsBasicData(){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id` AND P.`state`='Activo' AND P.`stock`>0";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows;
+			}
+			throw new Exception("No existen productos.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
 	function api_internal_products_getAllProductData($code){
 		$con = new Conexion();
 		if($con->connect()){
@@ -161,6 +178,21 @@
 		return $rows;
 	}
 
+	function api_internal_products_getAllAvailableProductsBasicDataByCategory($categoryId){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id` AND C.`id`='".$categoryId."' AND P.`state`='Activo' AND P.`stock`>0";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+			}
+		}
+		$con->close();
+		return $rows;
+	}
+
 	function api_internal_products_getFirstImg($id){
 		$con = new Conexion();
 		if($con->connect()){
@@ -203,7 +235,24 @@
 	function api_internal_products_getMostSelledProducts(){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock`, SUM(B.`quantity`) as quantity FROM `products` AS P, `bills` AS B, `categories` AS C WHERE C.`id` = P.`category_id` AND B.`id_product`=P.`id` AND B.`id_sale` IN (SELECT `id` FROM `sales` WHERE `selled`=1 AND `state`='Activo' ) GROUP BY `id_product` ORDER BY quantity DESC";
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock`, SUM(B.`quantity`) as quantity FROM `products` AS P, `bills` AS B, `categories` AS C WHERE C.`id` = P.`category_id` AND B.`id_product`=P.`id` AND B.`id_sale` IN (SELECT `id` FROM `sales` WHERE `selled`=1) GROUP BY `id_product` ORDER BY quantity DESC";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows;
+			}
+			throw new Exception("No existen productos");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
+	function api_internal_products_getMostSelledAvailableProducts(){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock`, SUM(B.`quantity`) as quantity FROM `products` AS P, `bills` AS B, `categories` AS C WHERE C.`id` = P.`category_id` AND B.`id_product`=P.`id` AND B.`id_sale` IN (SELECT `id` FROM `sales` WHERE `selled`=1 AND `state`='Activo' AND `stock`>0) GROUP BY `id_product` ORDER BY quantity DESC";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -234,7 +283,7 @@
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
-	function api_internal_product_updateProductStock($productId, $newStock){
+	function api_internal_products_updateProductStock($productId, $newStock){
 		$con = new Conexion();
 		if($con->connect()){
 			$query = "UPDATE `products` SET `stock`='".$newStock."' WHERE `id`='".$productId."'";

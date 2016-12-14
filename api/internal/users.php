@@ -134,11 +134,5 @@
 		);
 		return $json;
 	}
-
-	function api_usuarios_searchByName($name){
-		
-	}
-
-
 	
 ?>

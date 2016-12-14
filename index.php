@@ -12,14 +12,14 @@
 		$mostSelledProductsList;
 		$categoryProductsList;
 		if(!isset($_GET['categoryId'])){
-			$mostSelledProductsList = api_internal_products_getMostSelledProducts();
-			$allProductsList = api_internal_products_getAllProductsBasicData();
+			$mostSelledProductsList = api_internal_products_getMostSelledAvailableProducts();
+			$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
 			$title = "Productos mas vendidos";
 		}
 		else{
 			$categoryId = $_GET['categoryId'];
 			$categoryData = api_internal_categories_getCategoryData($categoryId);
-			$categoryProductsList = api_internal_products_getAllProductsBasicDataByCategory($categoryId);
+			$categoryProductsList = api_internal_products_getAllAvailableProductsBasicDataByCategory($categoryId);
 			$title = 'Productos de la categoría '.$categoryData['name'];
 		}
 		
@@ -37,12 +37,9 @@
 					}
 				}
 				else if(isset($categoryProductsList)){
-					if(count($categoryProductsList)==0) echo '<p>No existen productos para esta categoría</p>';
-					else{
-						foreach($categoryProductsList as $categoryProduct){
-							$firstImage = api_internal_products_getFirstImg($categoryProduct['id']);
-							components_cardProduct($categoryProduct['id'], $categoryProduct['name'], $categoryProduct['code'], $categoryProduct['manufacturer'], $categoryProduct['catName'], $categoryProduct['price'], $firstImage['id'], $firstImage['extension'], $categoryProduct['stock'], true);
-						}
+					foreach($categoryProductsList as $categoryProduct){
+						$firstImage = api_internal_products_getFirstImg($categoryProduct['id']);
+						components_cardProduct($categoryProduct['id'], $categoryProduct['name'], $categoryProduct['code'], $categoryProduct['manufacturer'], $categoryProduct['catName'], $categoryProduct['price'], $firstImage['id'], $firstImage['extension'], $categoryProduct['stock'], true);
 					}
 				}
 			?>

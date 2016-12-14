@@ -1,5 +1,5 @@
 <?php 
-	define('PAGE', "client-show-cart");
+	define('PAGE', "client-edit-profile");
 	include_once 'api/session.php';
 ?>
 <?php 
@@ -10,50 +10,13 @@
 	components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea finalizar la compra?", "modalConfirmacionFinalizarCompra");
 ?>
 <?php
-	//$userId = $_SESSION['id'];
-	$listOfProducts = api_internal_sales_getAllUnfinishedProductsBillsByUser($session_userId);
+	$listOfProducts = api_internal_sales_getAllFinishedProductsBillsByUser($session_userId);
 	$success = isset($_GET['success']);
 	$error = isset($_GET['error']);
-
-	if(isset($_GET['operation'])){
-		$operation = $_GET['operation'];
-		if($operation=='add'){
-			$productId = $_GET['productId'];
-			$quantity = $_GET['quantity'];
-			$error = api_internal_sales_AddToCart($session_userId, $productId, $quantity);
-			if(!is_bool($error)) return header("Location: client-show-cart.php?error=".$error);
-			return header ("Location: client-show-cart.php?success=El producto ha sido agregado al carrito");
-		}
-		else if($operation=='remove'){
-			$productId = $_GET['productId'];
-			$saleId = $_GET['saleId'];
-			$error = api_internal_sales_RemoveProductFromCart($session_userId, $productId);
-			if(!is_bool($error)) return header("Location: client-show-cart.php?error=".$error);
-			return header ("Location: client-show-cart.php?success=El producto ha sido removido del carrito");
-		}
-		else if($operation=='end'){
-			if(userHasNoEmailOrDirectionOrPhone($session_userId)) return header ("Location: client-edit-profile.php?error=Debe completar todos sus datos antes de realizar la compra");
-			$error = api_internal_sales_finishSale($session_userId);
-			if(!is_bool($error)) return header("Location: client-show-cart.php?error=".$error);
-			return header ("Location: client-show-cart.php?success=La compra se ha realizado correctamente");
-		}
-	}
 ?>
 
-<div class="ui <?php echo $success?"":"hidden" ?> success message">
-	<i class="close icon"></i>
-	<div class="header">Operacion completada correctamente</div>
-	<p><?php echo $success?$_GET['success']:""?></p>
-</div>
-
-<div class="ui <?php echo $error?"":"hidden" ?> error message">
-	<i class="close icon"></i>
-	<div class="header">Surgió un error al realizar la operación</div>
-	<p><?php echo $error?$_GET['error']:""?></p>
-</div>
-
 <div class="ui <?php echo (count($listOfProducts)>0)?'hidden':''?> warning message">
-	<div class="header">Advertencia	</div>No se han agregado productos al carrito
+	<div class="header">Advertencia	</div>No existen registros de ventas
 </div>
 
 <div style="padding-bottom:50px" class="ui segment">
