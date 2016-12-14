@@ -12,7 +12,7 @@
 ?>
 <?php
 	//$userId = $_SESSION['id'];
-	$listOfProducts = api_internal_sales_getAllUnfinishedProductsBillsByUser($session_userId);
+	$listOfProducts = api_internal_sales_getAllUnfinishedProductsBillsByUser($_SESSION['id']);
 	$success = isset($_GET['success']);
 	$error = isset($_GET['error']);
 
@@ -21,20 +21,20 @@
 		if($operation=='add'){
 			$productId = $_GET['productId'];
 			$quantity = $_GET['quantity'];
-			$error = api_internal_sales_AddToCart($session_userId, $productId, $quantity);
+			$error = api_internal_sales_AddToCart($_SESSION['id'], $productId, $quantity);
 			if(!is_bool($error)) return header("Location: client-show-cart.php?error=".$error);
 			return header ("Location: client-show-cart.php?success=El producto ha sido agregado al carrito");
 		}
 		else if($operation=='remove'){
 			$productId = $_GET['productId'];
 			$saleId = $_GET['saleId'];
-			$error = api_internal_sales_RemoveProductFromCart($session_userId, $productId);
+			$error = api_internal_sales_RemoveProductFromCart($_SESSION['id'], $productId);
 			if(!is_bool($error)) return header("Location: client-show-cart.php?error=".$error);
 			return header ("Location: client-show-cart.php?success=El producto ha sido removido del carrito");
 		}
 		else if($operation=='end'){
-			if(userHasNoEmailOrDirectionOrPhone($session_userId)) return header ("Location: client-edit-profile.php?error=Debe completar todos sus datos antes de realizar la compra");
-			$error = api_internal_sales_finishSale($session_userId);
+			if(userHasNoEmailOrDirectionOrPhone($_SESSION['id'])) return header ("Location: client-edit-profile.php?error=Debe completar todos sus datos antes de realizar la compra");
+			$error = api_internal_sales_finishSale($_SESSION['id']);
 			if(!is_bool($error)) return header("Location: client-show-cart.php?error=".$error);
 			return header ("Location: client-show-cart.php?success=La compra se ha realizado correctamente");
 		}

@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$adminArray = array("admin-add-category", "admin-add-product", "admin-add-user", "admin-detail-product", "admin-edit-category", "admin-edit-files", "admin-edit-product", "admin-edit-user", "admin-remove-category", "admin-remove-product", "admin-remove-user");
-	if (!isset($_SESSION['logged']) || $_SESSION['logged'] != 1 ) return header('Location: login.php?error="Auntentifíquese para ingresar"');
-	else if(LEVEL>$_SESSION['level']) return header('Location: login.php?error="Esta sección es solo para administradores"');
+	
+	if(!isset($_SESSION['level']) && LEVEL==2) return header('Location: login.php?error=Para continuar primero debe ingresar');
+	if(isset($_SESSION['level']) && $_SESSION['level']==1 && LEVEL==2) return header('Location: login.php?error=Esta sección es solo para administradores');
 ?>

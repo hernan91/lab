@@ -14,7 +14,19 @@
 	</div>
 
 	<div class="right menu">
-		<a href="api/logout.php" class="item">Salir</a>
+		<a class="item" href="index.php">Ir a la página principal</a>
+		<?php
+			if(isset($_SESSION['name'])){
+				echo '
+					<div class="ui item">
+						Bienvenido '.$_SESSION['name'].' 
+					</div>
+					<a href="api/logout.php"class="ui item">
+						Salir
+					</a>
+				';
+			}
+		?>
 	</div>
 </div>
 <script>

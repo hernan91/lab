@@ -13,8 +13,8 @@
 	$success = isset($_GET['success']);
 	$error = isset($_GET['error']);
 	$val = false;
-	$userData = api_internal_users_getUserData($session_userId);
-	$id = $session_userId;
+	$userData = api_internal_users_getUserData($_SESSION['id']);
+	$id = $_SESSION['id'];
 	$completed = false;
 	$email = $direction = $phone = "";
 
@@ -33,13 +33,11 @@
 		else{
 			$success = $val;
 			if($success){
-				header('Location: client-edit-profile.php?success=Sus datos se modificaron correctamente');
+				return header('Location: client-edit-profile.php?success=Sus datos se modificaron correctamente');
 				$completed = true;
-				die();
 			}
 			else{
-				header('Location: client-edit-profile.php?error=Hubieron errores al modificar sus datos');
-				die();
+				return header('Location: client-edit-profile.php?error=Hubieron errores al modificar sus datos');
 			}
 		}
 	}

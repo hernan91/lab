@@ -1,4 +1,4 @@
-<div style="display:<?php echo $_SESSION['logged']!=1?'none':'block' ?>" class="ui right fixed vertical menu">
+<div style="display:<?php echo isset($_SESSION['logged'])?'block':'none' ?>" class="ui right fixed vertical menu">
 	<div class="item">
 		<img class="ui mini image" src="data/img/cart.jpg">
 	</div>

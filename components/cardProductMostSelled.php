@@ -1,6 +1,6 @@
 <?php
 	function components_cardProductMostSelled($id, $name, $code, $manufacturer, $category, $price, $imgId, $imgExtension, $selled, $stock, $registered){
-		$tagPrice = $registered?'<span class="date">$'.$price.'</span>':"";
+		$tagPrice = $registered?'<b>$'.$price.'</b>':"";
 		$tagAddToCart = "";
 		if($registered){
 			$tagAddToCart = '

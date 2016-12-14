@@ -32,6 +32,13 @@
 					<?php echo isset($_GET['error'])?$_GET['error']:""?>
 				</p>
 			</div>
+			<div class="ui <?php echo isset($_GET['success'])?" ":"hidden " ?> success message">
+				<i class="close icon"></i>
+				<div class="header">Operacion completada correctamente</div>
+				<p>
+					<?php echo isset($_GET['success'])?$_GET['success']:""?>
+				</p>
+			</div>
 			<h2 class="ui image header">
 				<div class="content">
 					Ingrese a TecnoStore
@@ -52,7 +59,7 @@
 							<input id="cryptedPasswordField" type="hidden" name="password">
 						</div>
 					</div>
-					<div id="buttonIngresar" class="ui fluid large black submit button">Entrar</div>
+					<button id="buttonIngresar" class="ui fluid large black submit button">Entrar</button>
 				</div>
 			</form>
 			<div class="ui <?php echo count($errors)>0?'':'hidden' ?> error message">
@@ -73,46 +80,6 @@
 	</div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
-<script>
-	$('.message .close').on('click', function() {
-		$(this).closest('.message').transition('fade');
-	});
-	$('#buttonIngresar.ui.button').click(function(e){
-		e.preventDefault();
-		cryptPass();
-		$('#loguear.ui.form').form('submit');
-	});
-	function cryptPass(){
-		let userForm = $('#formAgregarUsuario.ui.form');
-		let passwordField = $('#password');
-		let cryptedPassword = CryptoJS.MD5(passwordField.val());
-		$('#cryptedPasswordField').val(cryptedPassword);
-	}
-	$('#loguear.ui.form').form({
-		on:'blur',
-		inline : true,
-		fields: {
-			username: {
-				identifier : 'username',
-				rules: [{
-					type   : 'empty',
-					prompt : 'Ingrese un usuario'
-				},{
-					type	: 'minLength[6]',
-					prompt	: 'El nombre de usuario debe tener al menos 6 caracteres'
-				}]
-			},
-			password: {
-				identifier : 'password',
-				rules: [{
-					type   : 'empty',
-					prompt : 'Ingrese una contraseña'
-				},{
-					type	: 'minLength[6]',
-					prompt	: 'La contraseña debe tener al menos 6 caracteres'
-				}]
-			}
-		}
-	});
+<script src="js/login.js">
 </script>
 </html>

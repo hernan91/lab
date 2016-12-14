@@ -8,9 +8,18 @@
 		<?php
 			if(isset($_SESSION['name'])){
 				echo '
-					<div class="ui item">
-						Bienvenido '.$_SESSION['name'].' 
+					<div style="margin-right:30px; color:blue;" class="ui item">
+						Bienvenido, '.$_SESSION['name'].'! 
 					</div>
+				';
+				if($_SESSION['level']>1){
+					echo '
+						<a href="admin-list-users.php"class="ui item">
+							Area de administración
+						</a>
+						';
+				}
+				echo '
 					<a href="api/logout.php"class="ui item">
 						Salir
 					</a>

@@ -19,7 +19,7 @@
 	}
 	
 	function handleLogin($username, $password){
-		$userData = isValidUser($_POST['username'], $_POST['password']);
+		$userData = isValidUser($username, $password);
 		$errors = array();
 		if(!isset($userData)){
 			$errors[] = "Nombre de usuario o contraseña inválidos";
@@ -27,6 +27,7 @@
 		}
 		session_start();
 		$_SESSION['logged'] = 1;
+		$_SESSION['id'] = $userData['id'];
 		$_SESSION['name'] = $userData['name'];
 		$_SESSION['level'] = $userData['role']=='Administrador'?2:1;
 	}

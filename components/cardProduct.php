@@ -1,6 +1,6 @@
 <?php
 	function components_cardProduct($id, $name, $code, $manufacturer, $category, $price, $imgId, $imgExtension, $stock, $registered){
-		$tagPrice = $registered?'<span class="date">$'.$price.'</span>':"";
+		$tagPrice = $registered?'<b>$'.$price.'</b>':"";
 		if($imgId==""||$imgExtension==""){
 			$imgId = "Relleno";
 			$imgExtension = "png";

@@ -9,9 +9,42 @@
 	<div class="item">
 		<h3 class="ui header">Productos</h3>	
 	</div>
-	<div class="item">
-		<div class="ui input"><input type="text" placeholder="Buscar producto..."></div>
+	<div class="ui segment">
+		<form class="ui form">
+			<div class="grouped fields">
+				<label>Opciones de filtrado</label>
+				<div class="field">
+					<div class="ui radio checkbox">
+						<input type="radio" name="field" checked="checked">
+						<label>Por código</label>
+					</div>
+				</div>
+				<div class="field">
+					<div class="ui radio checkbox">
+						<input type="radio" name="field">
+						<label>Por fabricante</label>
+					</div>
+				</div>
+				<div class="field">
+					<div id="radioPrice" class="ui radio checkbox">
+						<input type="radio" name="field">
+						<label>Precio menor a</label>
+					</div>
+				</div>
+				<div class="field">
+					<div id="radioPrice" class="ui radio checkbox">
+						<input type="radio" name="field">
+						<label>Precio mayor a</label>
+					</div>
+				</div>
+			</div>
+			<button class="ui basic button">
+				<i class="icon search"></i>
+				Buscar
+			</button>
+		<form>
 	</div>
+
 	<a href="index.php" class="item">
 		Todas las categorías
 	</a>
@@ -25,19 +58,9 @@
 			?>
 		</div>
 	</div>
-	<!--<a class="item">
-		<i class="grid layout icon"></i> Browse
-	</a>
-	<a class="item">
-		Messages
-	</a>
-	<div class="ui dropdown item">
-		More
-		<i class="dropdown icon"></i>
-		<div class="menu">
-			<a class="item"><i class="edit icon"></i> Edit Profile</a>
-			<a class="item"><i class="globe icon"></i> Choose Language</a>
-			<a class="item"><i class="settings icon"></i> Account Settings</a>
-		</div>
-	</div>-->
 </div>
+<script>
+	$(function(){
+
+	});
+</script>

@@ -15,44 +15,16 @@
 		
 		$mostSelledProductsList;
 		$categoryProductsList;
-		$searchedProductsList;
-		if(!isset($_GET['categoryId']) && !isset($_GET['field'])){
+		if(!isset($_GET['categoryId'])){
 			$mostSelledProductsList = api_internal_products_getMostSelledAvailableProducts();
 			$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
 			$title = "Productos mas vendidos";
 		}
-		else if(isset($_GET['categoryId'])){
+		else{
 			$categoryId = $_GET['categoryId'];
 			$categoryData = api_internal_categories_getCategoryData($categoryId);
 			$categoryProductsList = api_internal_products_getAllAvailableProductsBasicDataByCategory($categoryId);
 			$title = 'Productos de la categoría '.$categoryData['name'];
-		}
-		else if(isset($_GET['text']) && isset($_GET['field'])){
-			if($_GET['field']=="name"){
-				$searchedProductsList = api_internal_products_getProductsByNameLike($_GET['text']);
-				$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
-				$title = "Productos filtrados por el nombre <b>".$_GET['text']."</b>";
-			}
-			else if($_GET['field']=="code"){
-				$searchedProductsList = api_internal_products_getProductsByCodeLike($_GET['text']);
-				$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
-				$title = "Productos filtrados por el código <b>".$_GET['text']."</b>";
-			}
-			else if($_GET['field']=="manufacturer"){
-				$searchedProductsList = api_internal_products_getProductsByManufacturerLike($_GET['text']);
-				$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
-				$title = "Productos filtrados por el fabricante <b>".$_GET['text']."</b>";
-			}
-			else if($_GET['field']=="priceLessThan"){
-				$searchedProductsList = api_internal_products_getProductsByPriceLessThan($_GET['text']);
-				$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
-				$title = "Productos filtrados por precio menor a <b>".$_GET['text']."</b>";
-			}
-			else if($_GET['field']=="priceBiggerThan"){
-				$searchedProductsList = api_internal_products_getProductsByPriceBiggerThan($_GET['text']);
-				$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
-				$title = "Productos filtrados por precio mayor a <b>".$_GET['text']."</b>";
-			}
 		}
 		
 		$registered = true;
@@ -62,12 +34,6 @@
 		<h3 class="ui header"><?php echo $title ?></h3>
 		<div class="ui cards">
 			<?php
-				if(isset($searchedProductsList)){
-					foreach($searchedProductsList as $product){
-						$firstImage = api_internal_products_getFirstImg($product['id']);
-						components_cardProduct($product['id'], $product['name'], $product['code'], $product['manufacturer'], $product['catName'], $product['price'], $firstImage['id'], $firstImage['extension'], $product['stock'], isset($_SESSION['logged']));
-					}
-				}
 				if(isset($mostSelledProductsList)){
 					foreach($mostSelledProductsList as $selledProduct){
 						$firstImage = api_internal_products_getFirstImg($selledProduct['id']);

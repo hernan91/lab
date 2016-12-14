@@ -110,6 +110,60 @@
 		$con->close();
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
+
+	function api_internal_products_getProductData($idProduct, $idSale){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id` AS product_id, P.`code` as product_code, P.`name` as product_name, P.`manufacturer` as product_manufacturer, P.`price` as product_price, B.`quantity` as quantity FROM `products` AS P, `bills` AS B WHERE P.`id` = '$idProduct' AND B.`id_sale` = '$idSale' AND P.`id`=B.`id_product`";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows[0];
+			}
+			throw new Exception("No existe el producto.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
+	
+	function api_internal_getProductsBySale($idSale){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT `id_product` FROM `bills` WHERE `id_sale`='$idSale'";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows;
+			}
+			throw new Exception("No existe el producto.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
+	function api_internal_getFinishedSalesByUser($idUser){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT `id`,`date` FROM `sales` WHERE `id_user`='15' AND `selled`=1";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+				return $rows;
+			}
+			throw new Exception("No existe el producto.");
+		}
+		$con->close();
+		throw new Exception("Imposible conectarse a la base de datos.");
+	}
+
+
 	
 	function api_internal_products_getAllProductsBasicTableData(){
 		$con = new Conexion();
@@ -181,7 +235,7 @@
 	function api_internal_products_getAllAvailableProductsBasicDataByCategory($categoryId){
 		$con = new Conexion();
 		if($con->connect()){
-			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id` AND C.`id`='".$categoryId."' AND P.`state`='Activo' AND P.`stock`>0";
+			$query = "SELECT P.`id` AS product_id, P.`code` as product_code, P.`name` as product_name, P.`manufacturer` as product_manufacturer, P.`price` as product_price, B.`quantity` as quantity FROM `products` AS P,`categories` AS C WHERE P.`category_id`=C.`id` AND C.`id`='".$categoryId."' AND P.`state`='Activo' AND P.`stock`>0";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {
@@ -295,4 +349,78 @@
 		throw new Exception("Imposible conectarse a la base de datos.");
 	}
 
+	function api_internal_products_getProductsByCodeLike($code){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P, `categories` AS C WHERE P.`state`='Activo' AND P.`stock`>0 AND P.`code` LIKE '%$code%' AND C.`id`=P.`category_id`";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+			}
+		}
+		$con->close();
+		return $rows;		
+	}
+
+	function api_internal_products_getProductsByManufacturerLike($manufacturer){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P, `categories` AS C WHERE P.`state`='Activo' AND P.`stock`>0 AND P.`manufacturer` LIKE '%$manufacturer%' AND C.`id`=P.`category_id`";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+			}
+		}
+		$con->close();
+		return $rows;
+	}
+
+	function api_internal_products_getProductsByPriceLessThan($priceLessThan){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P, `categories` AS C WHERE P.`state`='Activo' AND P.`stock`>0 AND P.`price` < '$priceLessThan' AND C.`id`=P.`category_id`";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+			}
+		}
+		$con->close();
+		return $rows;
+	}
+
+	function api_internal_products_getProductsByPriceBiggerThan($priceBiggerThan){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P, `categories` AS C WHERE P.`state`='Activo' AND P.`stock`>0 AND P.`price` > '$priceBiggerThan' AND C.`id`=P.`category_id`";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+			}
+		}
+		$con->close();
+		return $rows;
+	}
+
+	function api_internal_products_getProductsByNameLike($name){
+		$con = new Conexion();
+		if($con->connect()){
+			$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P, `categories` AS C WHERE P.`state`='Activo' AND P.`stock`>0 AND P.`name` LIKE '%$name%' AND C.`id`=P.`category_id`";
+			$rows = array();
+			if($result = $con->query($query)){
+				while($r = mysqli_fetch_assoc($result)) {
+					$rows[] = $r;
+				}
+			}
+		}
+		$con->close();
+		return $rows;
+	}
 ?>

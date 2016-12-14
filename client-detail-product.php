@@ -77,7 +77,7 @@
 								<div class="header">Nombre</div>
 								<?php echo $productData['name']?>
 							</div>
-							<div class="item">
+							<div style="display: <?php echo isset($_SESSION['logged'])?"block":"none"?>"class="item">
 								<div class="header">Precio</div>
 								<?php echo $productData['price']?>
 							</div>
@@ -115,7 +115,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
+		<div style="display: <?php echo isset($_SESSION['logged'])?'block':'none' ?>" class="row">
 			<div>
 				<div class="ui left action input" style="margin-left:20px;">
 					<form id="addToCartForm" action="client-show-cart.php">
